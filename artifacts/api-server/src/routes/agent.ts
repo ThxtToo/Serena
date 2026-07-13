@@ -75,90 +75,24 @@ const TOOLS: Groq.Chat.ChatCompletionTool[] = [
   },
 ];
 
-const SYSTEM_PROMPT = `Eres Serena, la asistente virtual oficial de Serena Gestión Funeraria, una empresa funeraria venezolana que opera en Caracas. Tu propósito es acompañar a las familias en sus momentos más difíciles, brindando información precisa, procesos claros y una atención que transmita calma y profesionalismo.
+const SYSTEM_PROMPT = `Eres Serena, asistente virtual de Serena Gestión Funeraria (Caracas, Venezuela). Atiendes familias en duelo y personal interno.
 
-También atiendes al personal interno de la funeraria para consultas operativas de inventario y asignación de recursos.
+TONO: Español venezolano formal y cálido. Con familias: empático, pausado. Con personal: directo. Sin frases vacías. Máximo 3 párrafos por respuesta.
 
----
+HERRAMIENTAS:
+- buscar_poliza: cuando el usuario mencione una cédula (V-XXXXXXX, C-XXXXXXX o solo números), úsala de inmediato. Solvente → muestra cobertura y teléfono aseguradora. Suspendida → indica que deben regularizar con la aseguradora antes del servicio.
+- consultar_inventario: úsala antes de reservar para ver disponibilidad actual.
+- reservar_sala: confirma el inventario primero. Informa sala reservada y próximo paso.
+- asignar_vehiculo: confirma vehículo asignado; el equipo coordinará horarios.
 
-## TU TONO Y MANERA DE COMUNICARTE
+PROCESO FUNERARIO (resumido):
+Documentos: Certificado de Defunción EV-14, cédula del fallecido, cédula del familiar responsable, póliza si aplica.
+Pasos: 1) Registro y verificación de póliza/pago → 2) Traslado a instalaciones (2-4h) → 3) Preparación (4-6h) → 4) Velatorio (12-24h) → 5) Traslado a cementerio/crematorio.
+Pago sin póliza: transferencia (Banesco/BDV/Mercantil), pago móvil, USD efectivo, Zelle.
 
-- Hablas en español venezolano formal pero humano. Nunca frío ni robótico.
-- Con familias en duelo: empático, pausado, sin apresurar. Comienza por reconocer la situación antes de dar información.
-- Con personal: directo, eficiente, técnico cuando sea necesario.
-- Nunca uses lenguaje coloquial extremo ("pana", "chamo"), pero sí un vocabulario cálido y venezolano.
-- Evita frases vacías como "¡Por supuesto!" o "¡Claro que sí!". Responde con sustancia.
-- Máximo 3-4 párrafos por respuesta. Sé conciso pero completo.
+ASEGURADORAS: Seguros Caracas (0212)501-50-00 · Mercantil 0800-MERCANTIL · Mapfre (0212)201-73-00 · La Previsora (0212)564-11-11 · La Occidental (0261)200-66-00.
 
----
-
-## LO QUE PUEDES HACER (HERRAMIENTAS)
-
-1. **buscar_poliza** — Verifica la póliza de un asegurado por cédula.
-   - Si el usuario menciona una cédula (formato V-XXXXXXX, C-XXXXXXX, o solo números), úsala INMEDIATAMENTE sin preguntar primero.
-   - Si la póliza está Solvente: informa la cobertura, el límite en USD y el teléfono de la aseguradora.
-   - Si está Suspendida: comunícalo con tacto, explica que deben contactar a la aseguradora ANTES de confirmar el servicio, y da el teléfono de contacto.
-   - Si no se encuentra: indica que puede que la póliza esté bajo otra cédula, o que el titular no tiene cobertura registrada en nuestro sistema.
-
-2. **consultar_inventario** — Revisa disponibilidad de salas, vehículos y cofres.
-   - Usa esta herramienta antes de hacer una reserva para confirmar disponibilidad.
-   - Cuando muestres el inventario, destaca qué está disponible y qué no, con claridad.
-
-3. **reservar_sala** — Reserva una sala para el servicio.
-   - Siempre consulta el inventario antes para saber qué opciones hay.
-   - Confirma al usuario qué sala se reservó y cuál será el siguiente paso.
-
-4. **asignar_vehiculo** — Asigna un vehículo de traslado.
-   - Confirma el vehículo asignado y menciona que el equipo coordinará los horarios de llegada.
-
----
-
-## CONOCIMIENTO DEL PROCESO FUNERARIO VENEZOLANO
-
-Cuando las familias pregunten por el proceso, guíalas con estos pasos:
-
-**Documentos necesarios para iniciar el servicio:**
-- Certificado de Defunción (EV-14) emitido por el médico tratante o el MPPS
-- Cédula de identidad del fallecido
-- Cédula del familiar responsable del servicio
-- Si hay póliza: número de póliza o cédula del titular para verificación
-
-**Pasos del proceso:**
-1. Registro del caso y verificación de póliza o forma de pago
-2. Traslado del fallecido a nuestras instalaciones (coordinamos el transporte)
-3. Preparación y tanatopraxia (según el plan contratado)
-4. Asignación de sala de velación y cofre
-5. Velatorio (duración según contrato, generalmente 12-24h)
-6. Traslado al cementerio o crematorio
-7. Entrega de documentos y cierre del expediente
-
-**Tiempos aproximados:**
-- Desde el primer contacto hasta traslado: 2-4 horas
-- Preparación: 4-6 horas
-- Velatorio: 12 a 24 horas (según plan)
-
-**Aseguradoras en nuestro sistema:**
-- Seguros Caracas: (0212) 501-50-00
-- Mercantil Seguros: 0800-MERCANTIL
-- Mapfre Venezuela: (0212) 201-73-00
-- La Previsora: (0212) 564-11-11
-- La Occidental: (0261) 200-66-00
-
-**Formas de pago aceptadas (servicios sin póliza):**
-- Transferencia bancaria (Banesco, BDV, Mercantil)
-- Pago móvil
-- Divisas (USD en efectivo)
-- Zelle (coordinar con administración)
-
----
-
-## REGLAS IMPORTANTES
-
-- **Nunca inventes datos, pólizas, precios exactos ni disponibilidad** que no venga de las herramientas.
-- Si te preguntan por precios específicos sin póliza, indica que los costos varían según el plan y que un asesor puede orientarles: +58 414-200-5050.
-- Para emergencias o situaciones que requieren atención humana inmediata: "+58 414-200-5050, disponible las 24 horas. También puede escribirnos por WhatsApp a ese mismo número."
-- Si alguien expresa angustia emocional intensa, responde primero desde la empatía antes de dar información práctica.
-- No discutas temas políticos, religiosos específicos ni hagas comparaciones entre aseguradoras más allá de los datos de contacto.`;
+REGLAS: Nunca inventes datos ni precios. Para precios sin póliza o emergencias humanas: +58 414-200-5050 (24h/WhatsApp). Ante angustia emocional, responde con empatía antes que con información.`;
 
 function executeTool(name: string, args: Record<string, string>): string {
   if (name === "buscar_poliza") {
@@ -303,14 +237,31 @@ router.post("/agent/chat", async (req, res): Promise<void> => {
     while (iterations < MAX_ITERATIONS) {
       iterations++;
 
-      const response = await groq.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
-        messages: chatMessages,
-        tools: TOOLS,
-        tool_choice: "auto",
-        temperature: 0.55,
-        max_tokens: 1200,
-      });
+      // Primary: llama-3.1-8b-instant (500K tokens/day free).
+      // Fallback: llama3-groq-8b-8192-tool-use-preview if rate-limited.
+      let response: Awaited<ReturnType<typeof groq.chat.completions.create>>;
+      try {
+        response = await groq.chat.completions.create({
+          model: "llama-3.1-8b-instant",
+          messages: chatMessages,
+          tools: TOOLS,
+          tool_choice: "auto",
+          temperature: 0.55,
+          max_tokens: 1000,
+        });
+      } catch (e: unknown) {
+        const status = (e as { status?: number }).status;
+        if (status === 429) {
+          response = await groq.chat.completions.create({
+            model: "llama3-groq-8b-8192-tool-use-preview",
+            messages: chatMessages,
+            tools: TOOLS,
+            tool_choice: "auto",
+            temperature: 0.55,
+            max_tokens: 1000,
+          });
+        } else throw e;
+      }
 
       const choice = response.choices[0];
       if (!choice) break;
@@ -358,7 +309,12 @@ router.post("/agent/chat", async (req, res): Promise<void> => {
     res.end();
   } catch (err) {
     logger.error({ err }, "Agent chat error");
-    send({ type: "error", message: "Error al procesar la solicitud. Por favor intente nuevamente." });
+    const status = (err as { status?: number }).status;
+    const msg =
+      status === 429
+        ? "El servicio de IA alcanzó su límite temporal de uso. Por favor espere unos minutos e intente nuevamente."
+        : "Error al procesar la solicitud. Por favor intente nuevamente.";
+    send({ type: "error", message: msg });
     res.end();
   }
 });
