@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'wouter';
-import { Send, Box, Users, Loader2, Home, Car, Phone, Mail, CheckCircle2, XCircle } from 'lucide-react';
+import { Send, Box, Users, Loader2, Home, Car, Phone, Mail, CheckCircle2, XCircle, ShieldCheck, Truck, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 type ToolState = {
   tool: string;
@@ -354,7 +355,7 @@ export default function AgentChat() {
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 pb-8">
         <div className="max-w-3xl mx-auto space-y-6">
           {turns.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 sm:py-20 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="flex flex-col items-center py-10 sm:py-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 w-full">
               <div className="w-16 h-px bg-border mb-8"></div>
               <h1 className="font-serif text-2xl text-primary font-semibold mb-6 tracking-wide">Serena</h1>
               <div className="w-16 h-px bg-border mb-8"></div>
@@ -374,6 +375,124 @@ export default function AgentChat() {
                     {sug}
                   </button>
                 ))}
+              </div>
+
+              <div className="w-full max-w-4xl mx-auto mt-14 mb-6">
+                <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-6">Nuestro Proceso</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-6 sm:gap-2 relative px-4">
+                  <div className="hidden sm:block absolute top-9 left-[10%] right-[10%] h-px bg-border" />
+                  
+                  <div className="flex flex-col items-center flex-1 relative z-10">
+                    <Phone className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
+                      1
+                    </div>
+                    <h4 className="font-medium text-sm text-foreground mb-1.5">Primer Contacto</h4>
+                    <p className="text-xs text-muted-foreground max-w-[150px]">Comuníquese con nosotros por chat, teléfono o WhatsApp. Disponibles las 24 horas.</p>
+                  </div>
+                  
+                  <div className="flex flex-col items-center flex-1 relative z-10">
+                    <ShieldCheck className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
+                      2
+                    </div>
+                    <h4 className="font-medium text-sm text-foreground mb-1.5">Verificación de Póliza</h4>
+                    <p className="text-xs text-muted-foreground max-w-[150px]">Verificamos su cobertura con la aseguradora. Necesitará la cédula del titular.</p>
+                  </div>
+
+                  <div className="flex flex-col items-center flex-1 relative z-10">
+                    <Truck className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
+                      3
+                    </div>
+                    <h4 className="font-medium text-sm text-foreground mb-1.5">Traslado y Preparación</h4>
+                    <p className="text-xs text-muted-foreground max-w-[150px]">Coordinamos el traslado a nuestras instalaciones y la preparación del servicio (4-6 horas).</p>
+                  </div>
+
+                  <div className="flex flex-col items-center flex-1 relative z-10">
+                    <Home className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
+                      4
+                    </div>
+                    <h4 className="font-medium text-sm text-foreground mb-1.5">Velatorio</h4>
+                    <p className="text-xs text-muted-foreground max-w-[150px]">Asignamos sala de velación y cofre según su plan. El velatorio dura entre 12 y 24 horas.</p>
+                  </div>
+
+                  <div className="flex flex-col items-center flex-1 relative z-10">
+                    <MapPin className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
+                      5
+                    </div>
+                    <h4 className="font-medium text-sm text-foreground mb-1.5">Traslado Final</h4>
+                    <p className="text-xs text-muted-foreground max-w-[150px]">Coordinamos el traslado al cementerio o crematorio y cerramos el expediente.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full max-w-2xl mx-auto mt-14 mb-6 px-4">
+                <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-6">Preguntas Frecuentes</h3>
+                <Accordion type="multiple" className="w-full text-left">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Qué documentos necesito para iniciar el servicio?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Necesitará el Certificado de Defunción (EV-14) emitido por el médico tratante, la cédula de identidad del fallecido, la cédula del familiar responsable, y si tiene póliza, la cédula del titular para verificación. En casos de muerte violenta o accidental, también se requiere el acta del Cuerpo de Investigaciones (CICPC).
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Cómo verifico si tengo póliza de seguro funerario?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Escríbanos su número de cédula directamente en este chat y Serena consultará el sistema de forma inmediata. Si su póliza está registrada con nosotros, verá todos los detalles de cobertura en segundos.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-3">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Qué cubre una póliza de seguro funerario?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Depende del plan contratado. En general cubren: sala de velación, carroza, cofre, y en planes superiores, embalsamamiento y arreglos florales. El límite en dólares varía entre $600 y $3,000 según la aseguradora y el plan.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-4">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Qué pasa si la póliza está suspendida?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Si la póliza está suspendida por falta de pago, el servicio no está cubierto hasta que se regularice con la aseguradora. Le orientamos con los datos de contacto de la aseguradora para regularizarla. También puede optar por pago particular mientras se resuelve.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-5">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Cuánto tiempo toma el proceso completo?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Desde el primer contacto hasta el traslado inicial toman aproximadamente 2-4 horas. La preparación del cuerpo lleva entre 4 y 6 horas. El velatorio dura entre 12 y 24 horas según el plan. El proceso completo suele concluirse en 36 a 48 horas.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-6">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Cuáles son las formas de pago para servicios particulares?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Aceptamos transferencia bancaria (Banesco, BDV, Mercantil), pago móvil, dólares americanos en efectivo, y Zelle (coordinado con administración). El presupuesto se entrega antes de confirmar el servicio.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-7">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Pueden trasladar al fallecido desde otro estado del país?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Sí. Coordinamos traslados desde cualquier estado de Venezuela. El costo adicional de traslado interprovincial depende de la distancia y se coordina directamente con nuestro equipo: +58 414-200-5050.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-8">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Cuáles son los horarios de velación?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Nuestras instalaciones operan las 24 horas del día, los 7 días de la semana. La duración del velatorio (12h, 24h o más) depende del plan contratado o del acuerdo con administración.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-9">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Ofrecen servicio de embalsamamiento?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Sí. El embalsamamiento está incluido en los planes Premium y de Protección Total. Para planes básicos o servicios particulares, puede contratarse por separado. Consulte disponibilidad con nuestro equipo.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-10">
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Cómo puedo hablar con una persona del equipo?</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      Puede llamar o escribir por WhatsApp al +58 414-200-5050, disponible las 24 horas. También puede usar este chat para consultas inmediatas sobre pólizas, disponibilidad y reservas.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </div>
             </div>
           ) : (
