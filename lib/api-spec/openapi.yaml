@@ -3,13 +3,19 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Serena — Sistema de Gestión Funeraria API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: agent
+    description: AI agent operations
+  - name: inventory
+    description: Inventory management
+  - name: policies
+    description: Policy management
 paths:
   /healthz:
     get:
@@ -24,6 +30,101 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /agent/chat:
+    post:
+      operationId: agentChat
+      tags: [agent]
+      summary: Enviar mensaje al agente Serena (streaming SSE)
+      description: Sends a message to the Serena AI agent and returns a streaming SSE response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AgentChatInput"
+      responses:
+        "200":
+          description: Streaming SSE response
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /inventory:
+    get:
+      operationId: getInventory
+      tags: [inventory]
+      summary: Obtener estado del inventario
+      description: Returns current inventory state for all categories
+      responses:
+        "200":
+          description: Current inventory state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryState"
+    put:
+      operationId: updateInventoryItem
+      tags: [inventory]
+      summary: Actualizar estado de un item del inventario
+      description: Updates the status of an inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InventoryUpdateInput"
+      responses:
+        "200":
+          description: Updated inventory state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryState"
+
+  /policies:
+    get:
+      operationId: getPolicies
+      tags: [policies]
+      summary: Obtener todas las pólizas
+      description: Returns all insurance policies in the system
+      responses:
+        "200":
+          description: List of policies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Policy"
+
+  /policies/{cedula}:
+    get:
+      operationId: getPolicyByCedula
+      tags: [policies]
+      summary: Buscar póliza por cédula
+      description: Looks up a policy by the policyholder's ID number
+      parameters:
+        - name: cedula
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Policy found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Policy"
+        "404":
+          description: Policy not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +135,84 @@ components:
       required:
         - status
 
+    AgentChatInput:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum: [user, assistant, system]
+              content:
+                type: string
+            required: [role, content]
+        sessionId:
+          type: string
+          nullable: true
+      required: [messages]
+
+    InventoryState:
+      type: object
+      properties:
+        salas:
+          type: object
+          additionalProperties:
+            type: string
+        vehiculos:
+          type: object
+          additionalProperties:
+            type: string
+        cofres:
+          type: object
+          additionalProperties:
+            type: number
+      required: [salas, vehiculos, cofres]
+
+    InventoryUpdateInput:
+      type: object
+      properties:
+        categoria:
+          type: string
+          enum: [salas, vehiculos, cofres]
+        item:
+          type: string
+        valor:
+          type: string
+      required: [categoria, item, valor]
+
+    Policy:
+      type: object
+      properties:
+        cedula:
+          type: string
+        titular:
+          type: string
+        aseguradora:
+          type: string
+        plan:
+          type: string
+        limite_usd:
+          type: number
+        estatus:
+          type: string
+        cobertura:
+          type: array
+          items:
+            type: string
+        telefono_aseguradora:
+          type: string
+          nullable: true
+        contacto_aseguradora:
+          type: string
+          nullable: true
+      required: [cedula, titular, aseguradora, plan, limite_usd, estatus, cobertura]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]

@@ -1,0 +1,77 @@
+👁️ Entendido. Para estructurar una plataforma robusta, profesional y escalable que cumpla con las exigencias de la profesora y simule un entorno de producción real, dividiremos el desarrollo en **fases de diseño y arquitectura**. No podemos meter todo en un solo prompt ciego de Replit; hay que darle a la IA las directrices modulares exactas.
+A continuación, detallo la estructura completa del sistema, los roles de acceso, la lógica de seguridad y las funciones críticas que debe tener la plataforma web **Serena**.
+## 1. Arquitectura de Navegación y Roles (Seguridad)
+El sistema contará con un control de accesos simulado en el frontend que dividirá la experiencia según el rol del usuario, protegiendo las rutas mediante un estado de sesión.
+ * **Pantalla de Login Principal:** Un único punto de acceso con validación de credenciales (ficticias pero restrictivas).
+ * **Rol: Cliente / Usuario General (Portal Externo):**
+   * Interfaz limpia y orientada a la autogestión en momentos de crisis.
+   * Acceso limitado: No puede ver el stock global, la asignación de carrozas, ni los datos de otros clientes.
+ * **Rol: Personal / Operador Funerario (Panel Interno):**
+   * Consola de administración avanzada (Dashboard logístico).
+   * Acceso total a los módulos de ingesta (WhatsApp/PDF), comprobación de pólizas y asignación de infraestructura.
+## 2. Mapa del Sitio (Estructura de Vistas)
+### 🚪 Vista 1: Login & Seguridad
+ * Formulario estético con validación de campos.
+ * **Credenciales de prueba integradas:**
+   * admin@serena.com / admin123 \rightarrow Redirecciona al Panel de Personal.
+   * cliente@serena.com / cliente123 \rightarrow Redirecciona al Portal de Usuario.
+### 🏠 Vista 2: Portal del Cliente (Front de Usuario)
+ * **Estatus del Servicio en Tiempo Real:** Barra de progreso que indica la fase actual del servicio contratado (Ej: *Traslado en progreso \rightarrow Preparación \rightarrow Capilla asignada*).
+ * **Consulta de Cobertura Particular:** Campo para introducir su cédula y verificar qué incluye su póliza pre-comprada.
+ * **Botón de Emergencia / Contacto Directo:** Acceso rápido para reportar un deceso de forma inmediata vía llamada o mensajería.
+### 📊 Vista 3: Dashboard de Personal (Front Operativo Interno)
+ * **Módulo de Ingesta Avanzado:** Pestañas conmutables para procesar texto de WhatsApp u OCR simulado de archivos PDF (Certificado EV-14).
+ * **Motor de Verificación de Pólizas (Nacional):** Consola que cruza la cédula con la base de datos local y calcula la cobertura en dólares (USD).
+ * **Panel de Control de Stock y Logística:**
+   * Visualizador de inventario de cofres (Ataúdes de madera, metálicos).
+   * Estado de ocupación de Capillas de Velación (Sala Imperial A, Sala B).
+   * Disponibilidad de la flota vehicular (Carrozas Ford de Gala).
+ * **Generador y Emisor de Órdenes:** Botón para congelar los datos del servicio e imprimir el documento contractual oficial (@media print).
+## 3. Matriz de Datos Interactiva (Base de Datos Local en JS)
+Para demostrar el flujo real, el archivo JavaScript contendrá un objeto estructurado que alimentará las consultas del sistema de la siguiente manera:
+```json
+{
+  "usuarios": [
+    {"email": "admin@serena.com", "pass": "admin123", "rol": "personal"},
+    {"email": "cliente@serena.com", "pass": "cliente123", "rol": "usuario"}
+  ],
+  "polizas": [
+    {
+      "cedula": "V-14555666",
+      "titular": "Pedro Flores",
+      "aseguradora": "Seguros Caracas",
+      "plan": "Premium Corporativo",
+      "limite_usd": 2500,
+      "estatus": "Solvente",
+      "cobertura": ["Sala Imperial", "Carroza de Gala", "Cofre de Madera Fina"]
+    },
+    {
+      "cedula": "V-18765432",
+      "titular": "María Pérez",
+      "aseguradora": "Mercantil Seguros",
+      "plan": "Estándar Individual",
+      "limite_usd": 1200,
+      "estatus": "Solvente",
+      "cobertura": ["Sala Básica B", "Unidad EcoVan", "Cofre Metálico Estándar"]
+    },
+    {
+      "cedula": "V-22111000",
+      "titular": "Juan Rodríguez",
+      "aseguradora": "Mapfre",
+      "plan": "Familiar",
+      "limite_usd": 0,
+      "estatus": "Suspendido por Falta de Pago",
+      "cobertura": []
+    }
+  ],
+  "inventario": {
+    "salas": {"Imperial A": "Reservada", "Básica B": "Disponible"},
+    "vehiculos": {"Ford de Gala": "Asignado", "EcoVan": "Disponible"},
+    "cofres": {"Madera": 5, "Metálico": 0}
+  }
+}
+
+```
+## 4. Próximo Paso: Generación de Prompts para Replit
+Para que Replit Agent construya la aplicación perfectamente sin mezclar código ni generar errores de carga, es recomendable estructurarla en archivos limpios y separados.
+¿Comenzamos generando el prompt detallado para el archivo de estilos y vistas base (index.html y style.css), o prefieres que definamos primero las alertas de seguridad del sistema?

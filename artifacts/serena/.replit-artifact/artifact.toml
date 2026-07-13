@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Serena — Gestión Funeraria"
+version = "1.0.0"
+id = "artifacts/serena"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20293
+
+[services.development]
+run = "pnpm --filter @workspace/serena run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/serena", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/serena/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20293"
+BASE_PATH = "/"
