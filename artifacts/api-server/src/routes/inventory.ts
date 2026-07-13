@@ -5,8 +5,6 @@ import {
   GetInventoryResponse,
   UpdateInventoryItemResponse,
 } from "@workspace/api-zod";
-import * as zod from "zod";
-
 const router: IRouter = Router();
 
 router.get("/inventory", async (_req, res): Promise<void> => {
@@ -36,21 +34,27 @@ router.put("/inventory", async (req, res): Promise<void> => {
   res.json(UpdateInventoryItemResponse.parse(inventory));
 });
 
-// Add new inventory item
-const AddItemBody = zod.object({
-  categoria: zod.enum(["salas", "vehiculos", "cofres"]),
-  nombre: zod.string().min(1),
-  valorInicial: zod.string(),
-});
-
 router.post("/inventory/add", async (req, res): Promise<void> => {
-  const parsed = AddItemBody.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.message });
+  const { categoria, nombre, valorInicial } = req.body as {
+    categoria?: string;
+    nombre?: string;
+    valorInicial?: string;
+  };
+
+  if (!["salas", "vehiculos", "cofres"].includes(categoria ?? "")) {
+    res.status(400).json({ error: "categoria must be salas, vehiculos, or cofres" });
     return;
   }
-  const { categoria, nombre, valorInicial } = parsed.data;
-  addInventoryItem(categoria, nombre, valorInicial);
+  if (!nombre || typeof nombre !== "string" || nombre.trim() === "") {
+    res.status(400).json({ error: "nombre is required" });
+    return;
+  }
+
+  addInventoryItem(
+    categoria as "salas" | "vehiculos" | "cofres",
+    nombre.trim(),
+    valorInicial ?? "Disponible",
+  );
   res.json(GetInventoryResponse.parse(inventory));
 });
 

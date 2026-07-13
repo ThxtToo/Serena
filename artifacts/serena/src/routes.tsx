@@ -1,26 +1,19 @@
-import { Switch, Route, Redirect } from 'wouter';
+import { Switch, Route } from 'wouter';
 import Login from '@/pages/login';
 import Portal from '@/pages/portal';
 import Dashboard from '@/pages/dashboard';
+import AgentChat from '@/pages/agent-chat';
+import StockPage from '@/pages/stock';
 import NotFound from '@/pages/not-found';
 import { ProtectedRoute } from '@/components/layout/protected-route';
-import { AuthProvider, useAuth } from '@/hooks/use-auth';
-
-function RootRedirect() {
-  const { user, loading } = useAuth();
-  
-  if (loading) return null;
-  if (!user) return <Redirect to="/login" />;
-  return <Redirect to={user.role === 'personal' ? '/dashboard' : '/portal'} />;
-}
+import { AuthProvider } from '@/hooks/use-auth';
 
 export default function AppRoutes() {
   return (
     <AuthProvider>
       <Switch>
-        <Route path="/">
-          <RootRedirect />
-        </Route>
+        <Route path="/" component={AgentChat} />
+        <Route path="/stock" component={StockPage} />
         
         <Route path="/login" component={Login} />
         
