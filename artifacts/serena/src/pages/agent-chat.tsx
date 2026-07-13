@@ -29,13 +29,15 @@ const SUGGESTIONS = [
 ];
 
 function PolicyCard({ policy }: { policy: any }) {
-  if (policy.error) {
+  if (policy.error || policy.encontrado === false) {
     return (
       <div className="bg-red-50 text-red-700 p-4 rounded border border-red-100 mt-2 text-sm shadow-sm">
-        {policy.error}
+        {policy.error ?? policy.mensaje ?? 'Póliza no encontrada.'}
       </div>
     );
   }
+  const estatus: string = policy.estatus ?? '';
+  const esSolvente = estatus.toLowerCase() === 'solvente';
   return (
     <div className="bg-card border border-border rounded p-4 mt-2 shadow-sm space-y-3 w-[280px] sm:w-[320px]">
       <div className="flex justify-between items-start gap-2">
@@ -43,9 +45,11 @@ function PolicyCard({ policy }: { policy: any }) {
           <h4 className="font-semibold text-primary leading-tight">{policy.titular}</h4>
           <p className="text-xs text-muted-foreground mt-0.5">CI: {policy.cedula}</p>
         </div>
-        <Badge variant={policy.estatus.toLowerCase() === 'solvente' ? 'default' : 'destructive'} 
-          className={policy.estatus.toLowerCase() === 'solvente' ? 'bg-green-600 hover:bg-green-700 text-white border-transparent' : ''}>
-          {policy.estatus}
+        <Badge
+          variant={esSolvente ? 'default' : 'destructive'}
+          className={esSolvente ? 'bg-green-600 hover:bg-green-700 text-white border-transparent' : ''}
+        >
+          {estatus}
         </Badge>
       </div>
       
