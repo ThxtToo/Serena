@@ -42,7 +42,7 @@ const CofreInput = ({ name, initialQty }: { name: string, initialQty: number }) 
       value={qty} 
       onChange={e => setQty(e.target.value)}
       onBlur={handleBlur}
-      className="w-24 h-8 text-xs font-mono bg-white"
+      className="w-24 h-8 text-xs font-mono bg-white rounded-sm"
       data-testid={`input-cofre-${name.replace(/\s+/g, '-')}`}
     />
   );
@@ -71,12 +71,12 @@ const StatusSelect = ({ category, name, currentStatus, options }: { category: 's
         });
       }}
     >
-      <SelectTrigger className="w-[180px] h-8 text-xs bg-white" data-testid={`select-${category}-${name.replace(/\s+/g, '-')}`}>
+      <SelectTrigger className="w-[180px] h-8 text-xs bg-white rounded-sm" data-testid={`select-${category}-${name.replace(/\s+/g, '-')}`}>
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="rounded-sm">
         {options.map(o => (
-          <SelectItem key={o} value={o}>{o}</SelectItem>
+          <SelectItem key={o} value={o} className="text-xs">{o}</SelectItem>
         ))}
       </SelectContent>
     </Select>
@@ -88,16 +88,16 @@ function StatusPill({ status }: { status: string }) {
   const isAvailable = s === 'disponible';
   const isMaintenance = s.includes('mantenimiento') || s.includes('limpieza');
   
-  const color = isAvailable ? 'bg-green-100 text-green-700' : 
-                isMaintenance ? 'bg-red-100 text-red-700' : 
-                'bg-amber-100 text-amber-700';
+  const color = isAvailable ? 'bg-green-50 text-green-700' : 
+                isMaintenance ? 'bg-red-50 text-red-700' : 
+                'bg-amber-50 text-amber-700';
   
   const dotColor = isAvailable ? 'bg-green-500' : 
                    isMaintenance ? 'bg-red-500' : 
                    'bg-amber-500';
   
   return (
-    <div className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full w-fit ${color}`}>
+    <div className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-sm w-fit ${color}`}>
       <div className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></div>
       {status}
     </div>
@@ -143,9 +143,9 @@ export default function StockPage() {
 
   return (
     <div className="min-h-[100dvh] bg-background">
-      <header className="flex-none flex items-center justify-between px-4 sm:px-6 py-4 border-b bg-white shadow-sm sticky top-0 z-10">
+      <header className="flex-none flex items-center justify-between px-4 sm:px-6 py-4 border-b border-primary/20 bg-card sticky top-0 z-10">
         <div className="flex items-center gap-4">
-          <Link href="/" className="text-muted-foreground hover:text-primary transition-colors flex items-center justify-center w-8 h-8 bg-slate-50 rounded-full border border-slate-200 hover:bg-slate-100" data-testid="link-back-home">
+          <Link href="/" className="text-muted-foreground hover:text-primary transition-colors flex items-center justify-center w-8 h-8 rounded border border-border hover:bg-slate-50" data-testid="link-back-home">
             <ArrowLeft className="w-4 h-4"/>
           </Link>
           <div>
@@ -154,7 +154,7 @@ export default function StockPage() {
           </div>
         </div>
         <nav className="flex items-center gap-4 text-xs sm:text-sm font-medium">
-          <Link href="/login" className="text-brand-gold hover:text-amber-600 transition-colors flex items-center gap-1.5" data-testid="link-nav-login">
+          <Link href="/login" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5" data-testid="link-nav-login">
             <Users className="w-4 h-4"/> <span className="hidden sm:inline">Panel de Personal</span>
           </Link>
         </nav>
@@ -162,32 +162,33 @@ export default function StockPage() {
       
       <main className="max-w-5xl mx-auto p-4 sm:p-6 space-y-8 pb-12">
         {isLoading ? (
-           <div className="flex justify-center p-20"><Loader2 className="w-8 h-8 animate-spin text-brand-gold"/></div>
+           <div className="flex justify-center p-20"><Loader2 className="w-8 h-8 animate-spin text-primary/40"/></div>
         ) : (
           <>
-            <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-              <div className="p-4 sm:px-6 border-b bg-slate-50/80 flex items-center justify-between">
-                <h3 className="font-serif font-bold text-lg text-primary flex items-center gap-2">
-                  <Home className="w-5 h-5 text-brand-gold"/>
-                  Salas de Velación <Badge variant="secondary" className="ml-2 font-mono bg-white border border-slate-200 text-slate-600">{Object.keys(inventory?.salas || {}).length}</Badge>
+            <div className="bg-card border border-border rounded shadow-sm overflow-hidden">
+              <div className="p-4 sm:px-6 border-b flex items-center justify-between">
+                <h3 className="uppercase tracking-widest text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                  <Home className="w-4 h-4 text-primary/50"/>
+                  Salas de Velación 
+                  <Badge variant="secondary" className="ml-2 font-mono bg-slate-50 border border-slate-200 text-slate-600 rounded-sm px-1.5 py-0">{Object.keys(inventory?.salas || {}).length}</Badge>
                 </h3>
-                <Button variant="outline" size="sm" onClick={() => openAddModal('salas')} data-testid="btn-add-sala" className="bg-white hover:bg-slate-50 text-xs">
+                <Button variant="outline" size="sm" onClick={() => openAddModal('salas')} data-testid="btn-add-sala" className="bg-card text-xs rounded-sm h-8">
                   <Plus className="w-3.5 h-3.5 mr-1.5"/> Agregar Sala
                 </Button>
               </div>
               <div className="overflow-x-auto">
                 <Table>
-                  <TableHeader className="bg-white">
+                  <TableHeader className="bg-slate-50/50">
                     <TableRow className="hover:bg-transparent">
-                      <TableHead className="w-[30%]">Nombre de Sala</TableHead>
-                      <TableHead className="w-[30%]">Estado Actual</TableHead>
-                      <TableHead className="w-[40%] text-right">Acción</TableHead>
+                      <TableHead className="w-[30%] text-xs uppercase tracking-wider">Nombre de Sala</TableHead>
+                      <TableHead className="w-[30%] text-xs uppercase tracking-wider">Estado Actual</TableHead>
+                      <TableHead className="w-[40%] text-right text-xs uppercase tracking-wider">Acción</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {Object.entries(inventory?.salas || {}).map(([name, status]: [string, any]) => (
                       <TableRow key={name}>
-                        <TableCell className="font-medium text-slate-800">{name}</TableCell>
+                        <TableCell className="font-medium text-foreground">{name}</TableCell>
                         <TableCell><StatusPill status={status} /></TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end">
@@ -198,7 +199,7 @@ export default function StockPage() {
                     ))}
                     {Object.keys(inventory?.salas || {}).length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">No hay salas registradas en el inventario.</TableCell>
+                        <TableCell colSpan={3} className="text-center py-8 text-muted-foreground text-sm">No hay salas registradas en el inventario.</TableCell>
                       </TableRow>
                     )}
                   </TableBody>
@@ -206,29 +207,30 @@ export default function StockPage() {
               </div>
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-              <div className="p-4 sm:px-6 border-b bg-slate-50/80 flex items-center justify-between">
-                <h3 className="font-serif font-bold text-lg text-primary flex items-center gap-2">
-                  <Car className="w-5 h-5 text-brand-gold"/>
-                  Flota Vehicular <Badge variant="secondary" className="ml-2 font-mono bg-white border border-slate-200 text-slate-600">{Object.keys(inventory?.vehiculos || {}).length}</Badge>
+            <div className="bg-card border border-border rounded shadow-sm overflow-hidden">
+              <div className="p-4 sm:px-6 border-b flex items-center justify-between">
+                <h3 className="uppercase tracking-widest text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                  <Car className="w-4 h-4 text-primary/50"/>
+                  Flota Vehicular 
+                  <Badge variant="secondary" className="ml-2 font-mono bg-slate-50 border border-slate-200 text-slate-600 rounded-sm px-1.5 py-0">{Object.keys(inventory?.vehiculos || {}).length}</Badge>
                 </h3>
-                <Button variant="outline" size="sm" onClick={() => openAddModal('vehiculos')} data-testid="btn-add-vehiculo" className="bg-white hover:bg-slate-50 text-xs">
+                <Button variant="outline" size="sm" onClick={() => openAddModal('vehiculos')} data-testid="btn-add-vehiculo" className="bg-card text-xs rounded-sm h-8">
                   <Plus className="w-3.5 h-3.5 mr-1.5"/> Agregar Vehículo
                 </Button>
               </div>
               <div className="overflow-x-auto">
                 <Table>
-                  <TableHeader className="bg-white">
+                  <TableHeader className="bg-slate-50/50">
                     <TableRow className="hover:bg-transparent">
-                      <TableHead className="w-[30%]">Vehículo / Modelo</TableHead>
-                      <TableHead className="w-[30%]">Estado Actual</TableHead>
-                      <TableHead className="w-[40%] text-right">Acción</TableHead>
+                      <TableHead className="w-[30%] text-xs uppercase tracking-wider">Vehículo / Modelo</TableHead>
+                      <TableHead className="w-[30%] text-xs uppercase tracking-wider">Estado Actual</TableHead>
+                      <TableHead className="w-[40%] text-right text-xs uppercase tracking-wider">Acción</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {Object.entries(inventory?.vehiculos || {}).map(([name, status]: [string, any]) => (
                       <TableRow key={name}>
-                        <TableCell className="font-medium text-slate-800">{name}</TableCell>
+                        <TableCell className="font-medium text-foreground">{name}</TableCell>
                         <TableCell><StatusPill status={status} /></TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end">
@@ -239,7 +241,7 @@ export default function StockPage() {
                     ))}
                     {Object.keys(inventory?.vehiculos || {}).length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">No hay vehículos registrados en el inventario.</TableCell>
+                        <TableCell colSpan={3} className="text-center py-8 text-muted-foreground text-sm">No hay vehículos registrados en el inventario.</TableCell>
                       </TableRow>
                     )}
                   </TableBody>
@@ -247,28 +249,29 @@ export default function StockPage() {
               </div>
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-              <div className="p-4 sm:px-6 border-b bg-slate-50/80 flex items-center justify-between">
-                <h3 className="font-serif font-bold text-lg text-primary flex items-center gap-2">
-                  <Box className="w-5 h-5 text-brand-gold"/>
-                  Cofres (Stock) <Badge variant="secondary" className="ml-2 font-mono bg-white border border-slate-200 text-slate-600">{Object.keys(inventory?.cofres || {}).length}</Badge>
+            <div className="bg-card border border-border rounded shadow-sm overflow-hidden">
+              <div className="p-4 sm:px-6 border-b flex items-center justify-between">
+                <h3 className="uppercase tracking-widest text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                  <Box className="w-4 h-4 text-primary/50"/>
+                  Cofres (Stock) 
+                  <Badge variant="secondary" className="ml-2 font-mono bg-slate-50 border border-slate-200 text-slate-600 rounded-sm px-1.5 py-0">{Object.keys(inventory?.cofres || {}).length}</Badge>
                 </h3>
-                <Button variant="outline" size="sm" onClick={() => openAddModal('cofres')} data-testid="btn-add-cofre" className="bg-white hover:bg-slate-50 text-xs">
+                <Button variant="outline" size="sm" onClick={() => openAddModal('cofres')} data-testid="btn-add-cofre" className="bg-card text-xs rounded-sm h-8">
                   <Plus className="w-3.5 h-3.5 mr-1.5"/> Agregar Modelo
                 </Button>
               </div>
               <div className="overflow-x-auto">
                 <Table>
-                  <TableHeader className="bg-white">
+                  <TableHeader className="bg-slate-50/50">
                     <TableRow className="hover:bg-transparent">
-                      <TableHead className="w-[50%]">Modelo de Cofre</TableHead>
-                      <TableHead className="w-[50%] text-right">Cantidad en Stock</TableHead>
+                      <TableHead className="w-[50%] text-xs uppercase tracking-wider">Modelo de Cofre</TableHead>
+                      <TableHead className="w-[50%] text-right text-xs uppercase tracking-wider">Cantidad en Stock</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {Object.entries(inventory?.cofres || {}).map(([name, qty]: [string, any]) => (
                       <TableRow key={name}>
-                        <TableCell className="font-medium text-slate-800">{name}</TableCell>
+                        <TableCell className="font-medium text-foreground">{name}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end">
                             <CofreInput name={name} initialQty={qty} />
@@ -278,7 +281,7 @@ export default function StockPage() {
                     ))}
                     {Object.keys(inventory?.cofres || {}).length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={2} className="text-center py-8 text-muted-foreground">No hay cofres registrados en el inventario.</TableCell>
+                        <TableCell colSpan={2} className="text-center py-8 text-muted-foreground text-sm">No hay cofres registrados en el inventario.</TableCell>
                       </TableRow>
                     )}
                   </TableBody>
@@ -290,7 +293,7 @@ export default function StockPage() {
       </main>
 
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] rounded">
           <DialogHeader>
             <DialogTitle className="font-serif text-xl text-primary">Agregar al Inventario</DialogTitle>
           </DialogHeader>
@@ -305,13 +308,13 @@ export default function StockPage() {
                   valorInicial: v === 'cofres' ? '0' : 'Disponible' 
                 }))}
               >
-                <SelectTrigger data-testid="select-add-categoria">
+                <SelectTrigger data-testid="select-add-categoria" className="rounded-sm">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="salas">Salas de Velación</SelectItem>
-                  <SelectItem value="vehiculos">Flota Vehicular</SelectItem>
-                  <SelectItem value="cofres">Cofres (Ataúdes)</SelectItem>
+                <SelectContent className="rounded-sm">
+                  <SelectItem value="salas" className="text-sm">Salas de Velación</SelectItem>
+                  <SelectItem value="vehiculos" className="text-sm">Flota Vehicular</SelectItem>
+                  <SelectItem value="cofres" className="text-sm">Cofres (Ataúdes)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -323,6 +326,7 @@ export default function StockPage() {
                 onChange={e => setAddForm(prev => ({ ...prev, nombre: e.target.value }))} 
                 placeholder={addForm.categoria === 'salas' ? "Ej: Sala Imperial" : addForm.categoria === 'vehiculos' ? "Ej: Ford Explorer Negra" : "Ej: Cofre Caoba Standard"}
                 data-testid="input-add-nombre"
+                className="rounded-sm"
               />
             </div>
             
@@ -334,29 +338,30 @@ export default function StockPage() {
                   value={addForm.valorInicial} 
                   onChange={e => setAddForm(prev => ({ ...prev, valorInicial: e.target.value }))}
                   data-testid="input-add-valor"
+                  className="rounded-sm"
                 />
               ) : (
                 <Select 
                   value={addForm.valorInicial} 
                   onValueChange={v => setAddForm(prev => ({ ...prev, valorInicial: v }))}
                 >
-                  <SelectTrigger data-testid="select-add-valor">
+                  <SelectTrigger data-testid="select-add-valor" className="rounded-sm">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-sm">
                     {addForm.categoria === 'vehiculos' ? (
                       <>
-                        <SelectItem value="Disponible">Disponible</SelectItem>
-                        <SelectItem value="Asignado">Asignado</SelectItem>
-                        <SelectItem value="En Mantenimiento">En Mantenimiento</SelectItem>
-                        <SelectItem value="En Limpieza">En Limpieza</SelectItem>
+                        <SelectItem value="Disponible" className="text-sm">Disponible</SelectItem>
+                        <SelectItem value="Asignado" className="text-sm">Asignado</SelectItem>
+                        <SelectItem value="En Mantenimiento" className="text-sm">En Mantenimiento</SelectItem>
+                        <SelectItem value="En Limpieza" className="text-sm">En Limpieza</SelectItem>
                       </>
                     ) : (
                       <>
-                        <SelectItem value="Disponible">Disponible</SelectItem>
-                        <SelectItem value="Reservada">Reservada</SelectItem>
-                        <SelectItem value="En Mantenimiento">En Mantenimiento</SelectItem>
-                        <SelectItem value="En Limpieza">En Limpieza</SelectItem>
+                        <SelectItem value="Disponible" className="text-sm">Disponible</SelectItem>
+                        <SelectItem value="Reservada" className="text-sm">Reservada</SelectItem>
+                        <SelectItem value="En Mantenimiento" className="text-sm">En Mantenimiento</SelectItem>
+                        <SelectItem value="En Limpieza" className="text-sm">En Limpieza</SelectItem>
                       </>
                     )}
                   </SelectContent>
@@ -364,9 +369,9 @@ export default function StockPage() {
               )}
             </div>
           </div>
-          <div className="flex justify-end gap-3 pt-2 border-t">
-            <Button variant="outline" onClick={() => setIsAddModalOpen(false)}>Cancelar</Button>
-            <Button onClick={handleAddSave} disabled={!addForm.nombre || isAdding} data-testid="btn-add-save" className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <div className="flex justify-end gap-3 pt-4 border-t">
+            <Button variant="outline" size="sm" onClick={() => setIsAddModalOpen(false)} className="rounded-sm">Cancelar</Button>
+            <Button size="sm" onClick={handleAddSave} disabled={!addForm.nombre || isAdding} data-testid="btn-add-save" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-sm">
               {isAdding ? <Loader2 className="w-4 h-4 animate-spin mr-2"/> : <Save className="w-4 h-4 mr-2"/>}
               Guardar
             </Button>

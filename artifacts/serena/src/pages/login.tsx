@@ -33,23 +33,17 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-gold/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center p-4 bg-background relative overflow-hidden">
       <div className="w-full max-w-md z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary mb-4 shadow-lg border-2 border-brand-gold/20">
-            <span className="font-serif text-3xl text-brand-gold font-bold">S</span>
-          </div>
           <h1 className="text-4xl font-serif font-semibold text-primary mb-2 tracking-tight">Serena</h1>
-          <p className="text-muted-foreground text-sm uppercase tracking-widest">Gestión Funeraria</p>
+          <div className="w-12 h-px bg-border mx-auto mb-4"></div>
+          <p className="text-muted-foreground text-xs uppercase tracking-widest font-medium">Gestión Funeraria</p>
         </div>
 
-        <Card className="border-border/60 shadow-xl bg-card/80 backdrop-blur-md">
-          <CardHeader className="space-y-1 pb-6">
-            <CardTitle className="text-2xl text-center">Acceso al Sistema</CardTitle>
+        <Card className="border-border shadow-md bg-card rounded">
+          <CardHeader className="space-y-2 pb-6">
+            <CardTitle className="text-xl text-center font-serif text-primary">Bienvenido a Serena</CardTitle>
             <CardDescription className="text-center">
               Ingrese sus credenciales para continuar
             </CardDescription>
@@ -57,33 +51,33 @@ export default function Login() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
-                <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md flex items-center gap-2 border border-destructive/20 animate-in fade-in zoom-in-95">
+                <div className="p-3 text-sm text-destructive bg-destructive/10 rounded flex items-center gap-2 border border-destructive/20 animate-in fade-in zoom-in-95">
                   <AlertCircle className="w-4 h-4" />
                   {error}
                 </div>
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="email">Correo Electrónico</Label>
+                <Label htmlFor="email" className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Correo Electrónico</Label>
                 <Input 
                   id="email" 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="usuario@serena.com"
-                  className="bg-background/50 focus-visible:ring-brand-gold"
+                  className="bg-background focus-visible:ring-1 focus-visible:ring-primary/20 rounded-sm"
                   required
                   data-testid="input-email"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
+                <Label htmlFor="password" className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Contraseña</Label>
                 <Input 
                   id="password" 
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-background/50 focus-visible:ring-brand-gold"
+                  className="bg-background focus-visible:ring-1 focus-visible:ring-primary/20 rounded-sm"
                   required
                   data-testid="input-password"
                 />
@@ -91,19 +85,21 @@ export default function Login() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-md h-11"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm h-10 rounded-sm"
                 disabled={isLoading}
                 data-testid="button-submit"
               >
                 {isLoading ? "Verificando..." : "Ingresar"}
               </Button>
             </form>
+            
+            <div className="mt-8 pt-6 border-t text-center">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                Sistema de Gestión Funeraria — Serena &copy; {new Date().getFullYear()}
+              </p>
+            </div>
           </CardContent>
         </Card>
-        
-        <p className="text-center text-xs text-muted-foreground mt-8">
-          &copy; {new Date().getFullYear()} Serena. Todos los derechos reservados.
-        </p>
       </div>
     </div>
   );

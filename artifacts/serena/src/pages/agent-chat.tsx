@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'wouter';
-import { Send, Box, Users, MessageSquareHeart, Loader2, Home, Car, Phone, Mail, CheckCircle2, XCircle } from 'lucide-react';
+import { Send, Box, Users, Loader2, Home, Car, Phone, Mail, CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 type ToolState = {
@@ -30,13 +30,13 @@ const SUGGESTIONS = [
 function PolicyCard({ policy }: { policy: any }) {
   if (policy.error) {
     return (
-      <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-100 mt-2 text-sm">
+      <div className="bg-red-50 text-red-700 p-4 rounded border border-red-100 mt-2 text-sm shadow-sm">
         {policy.error}
       </div>
     );
   }
   return (
-    <div className="bg-white border rounded-xl p-4 mt-2 shadow-sm space-y-3 w-[280px] sm:w-[320px]">
+    <div className="bg-card border border-border rounded p-4 mt-2 shadow-sm space-y-3 w-[280px] sm:w-[320px]">
       <div className="flex justify-between items-start gap-2">
         <div>
           <h4 className="font-semibold text-primary leading-tight">{policy.titular}</h4>
@@ -48,14 +48,14 @@ function PolicyCard({ policy }: { policy: any }) {
         </Badge>
       </div>
       
-      <div className="grid grid-cols-2 gap-2 text-sm bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+      <div className="grid grid-cols-2 gap-2 text-sm bg-slate-50 p-2.5 rounded border border-slate-100">
         <div>
           <span className="text-muted-foreground block text-[10px] uppercase tracking-wider mb-0.5">Aseguradora</span>
-          <span className="font-medium text-xs truncate block" title={policy.aseguradora}>{policy.aseguradora}</span>
+          <span className="font-medium text-xs truncate block text-foreground" title={policy.aseguradora}>{policy.aseguradora}</span>
         </div>
         <div>
           <span className="text-muted-foreground block text-[10px] uppercase tracking-wider mb-0.5">Plan</span>
-          <span className="font-medium text-xs truncate block" title={policy.plan}>{policy.plan}</span>
+          <span className="font-medium text-xs truncate block text-foreground" title={policy.plan}>{policy.plan}</span>
         </div>
         <div className="col-span-2 pt-1 border-t mt-1">
           <span className="text-muted-foreground block text-[10px] uppercase tracking-wider mb-0.5">Límite Aprobado</span>
@@ -66,7 +66,7 @@ function PolicyCard({ policy }: { policy: any }) {
       {policy.cobertura && policy.cobertura.length > 0 && (
         <div className="pt-1">
           <p className="text-[10px] font-semibold text-muted-foreground mb-1 uppercase tracking-wider">Cobertura Incluida</p>
-          <ul className="list-disc pl-4 text-xs space-y-0.5 text-slate-700">
+          <ul className="list-disc pl-4 text-xs space-y-0.5 text-foreground">
             {policy.cobertura.map((item: string, i: number) => (
               <li key={i}>{item}</li>
             ))}
@@ -75,11 +75,11 @@ function PolicyCard({ policy }: { policy: any }) {
       )}
       
       {(policy.telefono_aseguradora || policy.contacto_aseguradora) && (
-        <div className="bg-amber-50/50 border border-amber-100 p-2.5 rounded-lg mt-2">
-          <p className="text-[10px] font-semibold text-amber-800 mb-1.5 uppercase tracking-wider">Contacto Aseguradora</p>
-          <div className="text-xs text-amber-900 flex flex-col gap-1.5 font-medium">
-            {policy.telefono_aseguradora && <span className="flex items-center gap-1.5"><Phone className="w-3 h-3 text-amber-600"/> {policy.telefono_aseguradora}</span>}
-            {policy.contacto_aseguradora && <span className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-amber-600"/> {policy.contacto_aseguradora}</span>}
+        <div className="bg-slate-50 border border-slate-200 p-2.5 rounded mt-2">
+          <p className="text-[10px] font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">Contacto Aseguradora</p>
+          <div className="text-xs text-slate-700 flex flex-col gap-1.5 font-medium">
+            {policy.telefono_aseguradora && <span className="flex items-center gap-1.5"><Phone className="w-3 h-3 text-slate-400"/> {policy.telefono_aseguradora}</span>}
+            {policy.contacto_aseguradora && <span className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-slate-400"/> {policy.contacto_aseguradora}</span>}
           </div>
         </div>
       )}
@@ -92,16 +92,16 @@ function StatusBadge({ status }: { status: string }) {
   const isAvailable = s === 'disponible';
   const isMaintenance = s.includes('mantenimiento') || s.includes('limpieza');
   
-  const color = isAvailable ? 'bg-green-100 text-green-700 border-green-200' : 
-                isMaintenance ? 'bg-red-100 text-red-700 border-red-200' : 
-                'bg-amber-100 text-amber-700 border-amber-200';
+  const color = isAvailable ? 'bg-green-50 text-green-700 border-green-200' : 
+                isMaintenance ? 'bg-red-50 text-red-700 border-red-200' : 
+                'bg-amber-50 text-amber-700 border-amber-200';
   
   const dotColor = isAvailable ? 'bg-green-500' : 
                    isMaintenance ? 'bg-red-500' : 
                    'bg-amber-500';
   
   return (
-    <div className={`flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${color}`}>
+    <div className={`flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded border ${color}`}>
       <div className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></div>
       {status}
     </div>
@@ -110,19 +110,19 @@ function StatusBadge({ status }: { status: string }) {
 
 function InventoryCard({ inventory }: { inventory: any }) {
   if (inventory.error) {
-    return <div className="bg-red-50 text-red-700 p-4 rounded-lg mt-2 text-sm">{inventory.error}</div>;
+    return <div className="bg-red-50 text-red-700 p-4 rounded mt-2 text-sm shadow-sm border border-red-100">{inventory.error}</div>;
   }
   
   return (
-    <div className="bg-white border rounded-xl p-4 mt-2 shadow-sm space-y-4 w-[280px] sm:w-[340px]">
+    <div className="bg-card border border-border rounded p-4 mt-2 shadow-sm space-y-4 w-[280px] sm:w-[340px]">
       <div>
         <h4 className="font-semibold text-primary text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wide">
-          <Home className="w-3.5 h-3.5 text-brand-gold"/> Salas de Velación
+          <Home className="w-3.5 h-3.5 text-primary/70"/> Salas de Velación
         </h4>
         <div className="grid gap-1.5">
           {Object.entries(inventory.salas || {}).map(([name, status]: [string, any]) => (
-            <div key={name} className="flex items-center justify-between bg-slate-50 px-2.5 py-1.5 rounded-md text-xs border border-slate-100">
-              <span className="font-medium text-slate-700">{name}</span>
+            <div key={name} className="flex items-center justify-between bg-slate-50 px-2.5 py-1.5 rounded text-xs border border-slate-100">
+              <span className="font-medium text-foreground">{name}</span>
               <StatusBadge status={status} />
             </div>
           ))}
@@ -134,12 +134,12 @@ function InventoryCard({ inventory }: { inventory: any }) {
       
       <div className="pt-1 border-t">
         <h4 className="font-semibold text-primary text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wide mt-3">
-          <Car className="w-3.5 h-3.5 text-brand-gold"/> Vehículos
+          <Car className="w-3.5 h-3.5 text-primary/70"/> Vehículos
         </h4>
         <div className="grid gap-1.5">
           {Object.entries(inventory.vehiculos || {}).map(([name, status]: [string, any]) => (
-            <div key={name} className="flex items-center justify-between bg-slate-50 px-2.5 py-1.5 rounded-md text-xs border border-slate-100">
-              <span className="font-medium text-slate-700 truncate mr-2" title={name}>{name}</span>
+            <div key={name} className="flex items-center justify-between bg-slate-50 px-2.5 py-1.5 rounded text-xs border border-slate-100">
+              <span className="font-medium text-foreground truncate mr-2" title={name}>{name}</span>
               <StatusBadge status={status} />
             </div>
           ))}
@@ -151,12 +151,12 @@ function InventoryCard({ inventory }: { inventory: any }) {
       
       <div className="pt-1 border-t">
         <h4 className="font-semibold text-primary text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wide mt-3">
-          <Box className="w-3.5 h-3.5 text-brand-gold"/> Cofres (Stock)
+          <Box className="w-3.5 h-3.5 text-primary/70"/> Cofres (Stock)
         </h4>
         <div className="flex flex-wrap gap-2">
           {Object.entries(inventory.cofres || {}).map(([name, qty]: [string, any]) => (
-            <div key={name} className="flex items-center gap-2 bg-slate-50 px-2.5 py-1.5 rounded-md text-xs border border-slate-100">
-              <span className="font-medium text-slate-700">{name}</span>
+            <div key={name} className="flex items-center gap-2 bg-slate-50 px-2.5 py-1.5 rounded text-xs border border-slate-100">
+              <span className="font-medium text-foreground">{name}</span>
               <Badge variant="secondary" className="font-mono bg-white border border-slate-200 text-[10px] px-1.5 py-0">{qty}</Badge>
             </div>
           ))}
@@ -172,7 +172,7 @@ function InventoryCard({ inventory }: { inventory: any }) {
 function ActionCard({ tool, result }: { tool: string, result: any }) {
   if (result.error) {
     return (
-      <div className="bg-red-50 border border-red-100 rounded-lg p-3 mt-2 flex items-start gap-2 text-sm text-red-800 max-w-[320px]">
+      <div className="bg-red-50 border border-red-100 rounded p-3 mt-2 flex items-start gap-2 text-sm text-red-800 max-w-[320px] shadow-sm">
         <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
         <div>
           <p className="font-semibold">Error al procesar</p>
@@ -185,12 +185,12 @@ function ActionCard({ tool, result }: { tool: string, result: any }) {
   const actionName = tool === 'reservar_sala' ? 'Reserva confirmada' : 'Vehículo asignado';
   
   return (
-    <div className="bg-green-50 border border-green-100 rounded-lg p-3 mt-2 flex items-start gap-2 text-sm text-green-800 max-w-[320px]">
+    <div className="bg-green-50 border border-green-100 rounded p-3 mt-2 flex items-start gap-2 text-sm text-green-800 max-w-[320px] shadow-sm">
       <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
       <div>
         <p className="font-semibold">{actionName}</p>
         {result.message && <p>{result.message}</p>}
-        {result.item && <p className="mt-1 font-medium bg-white px-2 py-1 rounded-md border border-green-100 inline-block">{result.item} → {result.status || result.nuevo_estado}</p>}
+        {result.item && <p className="mt-1 font-medium bg-white px-2 py-1 rounded border border-green-100 inline-block">{result.item} → {result.status || result.nuevo_estado}</p>}
       </div>
     </div>
   );
@@ -334,21 +334,18 @@ export default function AgentChat() {
 
   return (
     <div className="flex flex-col h-[100dvh] bg-background">
-      <header className="flex-none flex items-center justify-between px-4 sm:px-6 py-4 border-b bg-white shadow-[0_1px_10px_rgba(0,0,0,0.02)] sticky top-0 z-10">
+      <header className="flex-none flex items-center justify-between px-4 sm:px-6 py-4 border-b border-primary/20 bg-card sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-serif text-xl font-bold shadow-sm">
-            S
-          </div>
           <div>
-            <h1 className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">Serena</h1>
-            <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-[0.15em]">Asistente Funerario</p>
+            <h1 className="font-serif text-xl sm:text-2xl font-bold text-primary leading-tight">Serena</h1>
+            <p className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-[0.15em]">Sistema de Gestión Funeraria</p>
           </div>
         </div>
         <nav className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm font-medium">
           <Link href="/stock" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5" data-testid="link-nav-stock">
             <Box className="w-4 h-4"/> <span className="hidden sm:inline">Inventario</span>
           </Link>
-          <Link href="/login" className="text-brand-gold hover:text-amber-600 transition-colors flex items-center gap-1.5" data-testid="link-nav-login">
+          <Link href="/login" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5" data-testid="link-nav-login">
             <Users className="w-4 h-4"/> <span className="hidden sm:inline">Panel de Personal</span>
           </Link>
         </nav>
@@ -358,14 +355,12 @@ export default function AgentChat() {
         <div className="max-w-3xl mx-auto space-y-6">
           {turns.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 sm:py-20 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center mb-6">
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-sm">
-                  <MessageSquareHeart className="w-6 h-6"/>
-                </div>
-              </div>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mb-3">Estamos aquí para acompañarle</h2>
+              <div className="w-16 h-px bg-border mb-8"></div>
+              <h1 className="font-serif text-2xl text-primary font-semibold mb-6 tracking-wide">Serena</h1>
+              <div className="w-16 h-px bg-border mb-8"></div>
+              <h2 className="font-serif text-xl sm:text-2xl text-primary mb-3">¿En qué podemos asistirle?</h2>
               <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto mb-10 leading-relaxed px-4">
-                Serena es su asistente virtual. Puede consultarle sobre pólizas, disponibilidad de salas, o cualquier servicio que necesite en estos momentos.
+                Consulte sobre pólizas de seguros, disponibilidad de servicios o comuníquese con nuestro equipo de atención.
               </p>
               
               <div className="w-full max-w-xl flex flex-col gap-2 px-4">
@@ -373,7 +368,7 @@ export default function AgentChat() {
                   <button 
                     key={i} 
                     onClick={() => handleSend(sug)}
-                    className="bg-white hover:bg-amber-50/50 border border-slate-200 hover:border-brand-gold/50 text-left px-5 py-3.5 rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-md transition-all text-sm font-medium text-slate-700 hover:text-primary"
+                    className="bg-card border border-border hover:border-primary/40 hover:bg-primary/[0.03] text-left px-5 py-3.5 rounded shadow-sm hover:shadow transition-all text-sm text-foreground"
                     data-testid={`btn-suggestion-${i}`}
                   >
                     {sug}
@@ -389,8 +384,8 @@ export default function AgentChat() {
                   {(turn.content || (turn.role === 'assistant' && !turn.toolStates.length && turn.isStreaming)) && (
                     <div className={`px-5 py-3.5 rounded-2xl ${
                       turn.role === 'user' 
-                        ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-md' 
-                        : 'bg-white border border-slate-100 text-slate-800 rounded-tl-sm shadow-sm'
+                        ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-sm' 
+                        : 'bg-card border border-border text-foreground rounded-tl-sm shadow-sm'
                     }`}>
                       {turn.content ? (
                         <div className="whitespace-pre-wrap text-[15px] leading-relaxed">
@@ -409,8 +404,8 @@ export default function AgentChat() {
                   {turn.toolStates.map((tool, idx) => (
                     <div key={idx} className="w-full max-w-full">
                       {tool.status === 'calling' && (
-                        <div className="flex items-center gap-2 text-xs font-medium text-brand-gold bg-amber-50/80 px-3.5 py-2 rounded-full w-fit mt-1 animate-pulse border border-amber-100 shadow-sm">
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <div className="flex items-center gap-2 text-xs font-medium text-primary bg-primary/5 px-3.5 py-2 rounded-full w-fit mt-1 border border-primary/10 shadow-sm">
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-primary/70" />
                           {tool.tool === 'buscar_poliza' ? 'Verificando póliza...' : 
                            tool.tool === 'consultar_inventario' ? 'Consultando inventario...' : 
                            tool.tool === 'reservar_sala' ? 'Procesando reserva...' : 
@@ -434,7 +429,7 @@ export default function AgentChat() {
         </div>
       </main>
       
-      <div className="flex-none p-4 bg-white border-t sticky bottom-0 z-10 w-full shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
+      <div className="flex-none p-4 bg-card border-t border-border sticky bottom-0 z-10 w-full shadow-sm">
         <div className="max-w-3xl mx-auto relative flex items-end gap-2">
           <textarea
             ref={inputRef}
@@ -442,14 +437,14 @@ export default function AgentChat() {
             onChange={handleInput}
             onKeyDown={handleKeyDown}
             placeholder="Escriba su consulta aquí..."
-            className="w-full bg-slate-50 border-slate-200 border rounded-2xl pl-4 pr-12 py-3.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-brand-gold/40 focus:border-brand-gold focus:bg-white resize-none transition-all min-h-[52px] max-h-[120px]"
+            className="w-full bg-background border-border border rounded pl-4 pr-12 py-3.5 text-[15px] focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all min-h-[52px] max-h-[120px] resize-none"
             rows={1}
             data-testid="input-chat"
           />
           <button 
             onClick={() => handleSend(inputValue)}
             disabled={!inputValue.trim() || (turns.length > 0 && turns[turns.length-1].isStreaming)}
-            className="absolute right-2 bottom-2 aspect-square w-10 h-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+            className="absolute right-2 bottom-2 aspect-square w-10 h-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             data-testid="btn-send-message"
           >
             <Send className="w-4 h-4 ml-0.5" />
@@ -461,11 +456,11 @@ export default function AgentChat() {
         href="https://wa.me/584142005050"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-24 right-4 sm:right-6 z-50 bg-[#25D366] text-white p-3.5 sm:p-4 rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.3)] hover:shadow-[0_8px_30px_rgba(37,211,102,0.5)] hover:-translate-y-1 transition-all duration-300"
+        className="fixed bottom-[88px] right-5 z-50 bg-[#25D366] text-white p-3 rounded-full shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
         title="Hablar con un asesor — +58 414-200-5050"
         data-testid="link-whatsapp"
       >
-        <svg viewBox="0 0 24 24" className="w-6 h-6 sm:w-7 sm:h-7" fill="currentColor">
+        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
         </svg>
       </a>
