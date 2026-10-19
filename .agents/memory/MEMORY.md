@@ -1,0 +1,1 @@
+- [Serena academic evaluation](serena-academic-evaluation.md) — Keep the input/process/output flow, validation order, ER model, and response outcomes visible for the university evaluation.
