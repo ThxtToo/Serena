@@ -1,1 +1,2 @@
 - [Serena academic evaluation](serena-academic-evaluation.md) — Keep the input/process/output flow, validation order, ER model, and response outcomes visible for the university evaluation.
+- [Serena inventory roles](serena-inventory-roles.md) — Inventory administration belongs to staff; do not expose its page in normal-user navigation.

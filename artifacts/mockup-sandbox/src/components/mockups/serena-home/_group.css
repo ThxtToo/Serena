@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@theme inline {
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+}
+
+:root {
+  --background: 210 18% 96%;
+  --foreground: 215 35% 15%;
+  --border: 215 15% 82%;
+  --input: 215 15% 82%;
+  --ring: 215 30% 35%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 215 35% 15%;
+  --card-border: 215 12% 88%;
+
+  --sidebar: 215 22% 94%;
+  --sidebar-foreground: 215 35% 15%;
+  --sidebar-border: 215 15% 82%;
+  --sidebar-primary: 215 45% 18%;
+  --sidebar-primary-foreground: 210 18% 97%;
+  --sidebar-accent: 215 18% 88%;
+  --sidebar-accent-foreground: 215 35% 15%;
+  --sidebar-ring: 215 30% 45%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 35% 15%;
+  --popover-border: 215 12% 88%;
+
+  --primary: 215 45% 18%;
+  --primary-foreground: 210 18% 97%;
+
+  --secondary: 215 18% 90%;
+  --secondary-foreground: 215 45% 18%;
+
+  --muted: 215 15% 91%;
+  --muted-foreground: 215 15% 42%;
+
+  --accent: 215 12% 87%;
+  --accent-foreground: 215 45% 18%;
+
+  --destructive: 0 65% 48%;
+  --destructive-foreground: 0 0% 100%;
+
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-serif: 'Playfair Display', serif;
+  --app-font-mono: Menlo, monospace;
+  --radius: 0.25rem;
+
+  --shadow-sm: 0px 1px 3px hsl(215 35% 15% / 0.06), 0px 1px 2px hsl(215 35% 15% / 0.04);
+  --shadow: 0px 2px 6px hsl(215 35% 15% / 0.08), 0px 1px 3px hsl(215 35% 15% / 0.04);
+  --shadow-md: 0px 4px 12px hsl(215 35% 15% / 0.08), 0px 2px 4px hsl(215 35% 15% / 0.04);
+  --shadow-lg: 0px 8px 24px hsl(215 35% 15% / 0.08), 0px 4px 8px hsl(215 35% 15% / 0.04);
+  --shadow-xl: 0px 16px 40px hsl(215 35% 15% / 0.10), 0px 8px 16px hsl(215 35% 15% / 0.05);
+
+  --brand-silver: 215 12% 55%;
+
+  /* Fallbacks */
+  --sidebar-primary-border: hsl(var(--sidebar-primary));
+  --sidebar-accent-border: hsl(var(--sidebar-accent));
+  --primary-border: hsl(var(--primary));
+  --secondary-border: hsl(var(--secondary));
+  --muted-border: hsl(var(--muted));
+  --accent-border: hsl(var(--accent));
+  --destructive-border: hsl(var(--destructive));
+}
+
+.dark {
+  --background: 218 25% 9%;
+  --foreground: 210 15% 90%;
+  --border: 218 18% 22%;
+  --input: 218 18% 22%;
+  --ring: 215 20% 50%;
+
+  --card: 218 25% 12%;
+  --card-foreground: 210 15% 90%;
+  --card-border: 218 18% 22%;
+
+  --sidebar: 218 25% 10%;
+  --sidebar-foreground: 210 15% 90%;
+  --sidebar-border: 218 18% 22%;
+  --sidebar-primary: 210 15% 90%;
+  --sidebar-primary-foreground: 218 25% 10%;
+  --sidebar-accent: 218 20% 20%;
+  --sidebar-accent-foreground: 210 15% 90%;
+  --sidebar-ring: 215 20% 50%;
+
+  --popover: 218 25% 12%;
+  --popover-foreground: 210 15% 90%;
+  --popover-border: 218 18% 22%;
+
+  --primary: 210 15% 90%;
+  --primary-foreground: 218 25% 12%;
+
+  --secondary: 218 18% 22%;
+  --secondary-foreground: 210 15% 90%;
+
+  --muted: 218 18% 22%;
+  --muted-foreground: 215 12% 58%;
+
+  --accent: 218 15% 26%;
+  --accent-foreground: 210 15% 90%;
+
+  --destructive: 0 60% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --brand-silver: 215 12% 55%;
+}

@@ -1,10 +1,21 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useAuth, UserRole } from '@/hooks/use-auth';
 
 export function ProtectedRoute({ children, allowedRole }: { children: ReactNode; allowedRole?: UserRole }) {
   const { user, loading } = useAuth();
   const [, setLocation] = useLocation();
+  const redirectPath = !loading
+    ? !user
+      ? '/login'
+      : allowedRole && user.role !== allowedRole
+        ? user.role === 'personal' ? '/dashboard' : '/portal'
+        : null
+    : null;
+
+  useEffect(() => {
+    if (redirectPath) setLocation(redirectPath);
+  }, [redirectPath, setLocation]);
 
   if (loading) {
     return (
@@ -17,15 +28,7 @@ export function ProtectedRoute({ children, allowedRole }: { children: ReactNode;
     );
   }
 
-  if (!user) {
-    setLocation('/login');
-    return null;
-  }
-
-  if (allowedRole && user.role !== allowedRole) {
-    setLocation(user.role === 'personal' ? '/dashboard' : '/portal');
-    return null;
-  }
+  if (redirectPath) return null;
 
   return <>{children}</>;
 }

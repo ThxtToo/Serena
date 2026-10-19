@@ -13,7 +13,11 @@ export default function AppRoutes() {
     <AuthProvider>
       <Switch>
         <Route path="/" component={AgentChat} />
-        <Route path="/stock" component={StockPage} />
+        <Route path="/stock">
+          <ProtectedRoute allowedRole="personal">
+            <StockPage />
+          </ProtectedRoute>
+        </Route>
         
         <Route path="/login" component={Login} />
         

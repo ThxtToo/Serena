@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { Send, Box, Users, Loader2, Home, Car, Phone, Mail, CheckCircle2, XCircle, ShieldCheck, Truck, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { useAuth } from '@/hooks/use-auth';
 
 type ToolState = {
   tool: string;
@@ -23,9 +24,7 @@ type MessageTurn = {
 const SUGGESTIONS = [
   "Verificar mi póliza — cédula V-14555666",
   "¿Qué salas de velación tienen disponibles?",
-  "Necesito reservar una sala para mi familiar",
-  "¿Cuál es el contacto de Seguros Caracas?",
-  "¿Cuántos cofres de madera tienen disponibles?"
+  "Necesito reservar una sala para mi familiar"
 ];
 
 function PolicyCard({ policy }: { policy: any }) {
@@ -202,12 +201,14 @@ function ActionCard({ tool, result }: { tool: string, result: any }) {
 }
 
 export default function AgentChat() {
+  const { user } = useAuth();
   const [turns, setTurns] = useState<MessageTurn[]>([]);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    if (turns.length === 0) return;
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [turns, turns.map(t => t.content).join('')]);
 
@@ -339,103 +340,133 @@ export default function AgentChat() {
 
   return (
     <div className="flex flex-col h-[100dvh] bg-background">
-      <header className="flex-none flex items-center justify-between px-4 sm:px-6 py-4 border-b border-primary/20 bg-card sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <div>
-            <h1 className="font-serif text-xl sm:text-2xl font-bold text-primary leading-tight">Serena</h1>
-            <p className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-[0.15em]">Sistema de Gestión Funeraria</p>
-          </div>
-        </div>
-        <nav className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm font-medium">
-          <Link href="/stock" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5" data-testid="link-nav-stock">
-            <Box className="w-4 h-4"/> <span className="hidden sm:inline">Inventario</span>
-          </Link>
-          <Link href="/login" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5" data-testid="link-nav-login">
-            <Users className="w-4 h-4"/> <span className="hidden sm:inline">Panel de Personal</span>
-          </Link>
+      <header className="flex-none flex items-center justify-between px-4 sm:px-8 py-3.5 border-b border-border bg-card/95 backdrop-blur sticky top-0 z-10">
+        <Link href="/" className="group flex items-center gap-3" aria-label="Serena, inicio">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-primary/[0.04] font-serif text-lg font-semibold text-primary">S</span>
+          <span>
+            <span className="block font-serif text-xl sm:text-2xl font-bold text-primary leading-tight">Serena</span>
+            <span className="hidden sm:block text-[10px] font-medium text-muted-foreground uppercase tracking-[0.14em]">Acompañamiento funerario</span>
+          </span>
+        </Link>
+        <nav className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+          {user?.role === 'personal' && (
+            <>
+              <Link href="/stock" className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-primary" data-testid="link-nav-stock">
+                <Box className="w-4 h-4"/> <span>Inventario</span>
+              </Link>
+              <Link href="/dashboard" className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-primary-foreground transition-colors hover:bg-primary/90" data-testid="link-nav-dashboard">
+                <Users className="w-4 h-4"/> <span className="hidden sm:inline">Panel de Personal</span><span className="sm:hidden">Panel</span>
+              </Link>
+            </>
+          )}
+          {user?.role === 'usuario' && (
+            <Link href="/portal" className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-primary transition-colors hover:bg-muted" data-testid="link-nav-portal">
+              <Users className="w-4 h-4"/> <span>Mi portal</span>
+            </Link>
+          )}
+          {!user && (
+            <Link href="/login" className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-primary transition-colors hover:bg-muted" data-testid="link-nav-login">
+              <Users className="w-4 h-4"/> <span>Acceso de personal</span>
+            </Link>
+          )}
         </nav>
       </header>
       
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 pb-8">
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-4xl mx-auto space-y-6">
           {turns.length === 0 ? (
-            <div className="flex flex-col items-center py-10 sm:py-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 w-full">
-              <div className="w-16 h-px bg-border mb-8"></div>
-              <h1 className="font-serif text-2xl text-primary font-semibold mb-6 tracking-wide">Serena</h1>
-              <div className="w-16 h-px bg-border mb-8"></div>
-              <h2 className="font-serif text-xl sm:text-2xl text-primary mb-3">¿En qué podemos asistirle?</h2>
-              <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto mb-10 leading-relaxed px-4">
-                Consulte sobre pólizas de seguros, disponibilidad de servicios o comuníquese con nuestro equipo de atención.
-              </p>
-              
-              <div className="w-full max-w-xl flex flex-col gap-2 px-4">
-                {SUGGESTIONS.map((sug, i) => (
-                  <button 
-                    key={i} 
-                    onClick={() => handleSend(sug)}
-                    className="bg-card border border-border hover:border-primary/40 hover:bg-primary/[0.03] text-left px-5 py-3.5 rounded shadow-sm hover:shadow transition-all text-sm text-foreground"
-                    data-testid={`btn-suggestion-${i}`}
-                  >
-                    {sug}
-                  </button>
-                ))}
-              </div>
-
-              <div className="w-full max-w-4xl mx-auto mt-14 mb-6">
-                <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-6">Nuestro Proceso</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-5 gap-6 sm:gap-2 relative px-4">
-                  <div className="hidden sm:block absolute top-9 left-[10%] right-[10%] h-px bg-border" />
-                  
-                  <div className="flex flex-col items-center flex-1 relative z-10">
-                    <Phone className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
-                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
-                      1
-                    </div>
-                    <h4 className="font-medium text-sm text-foreground mb-1.5">Primer Contacto</h4>
-                    <p className="text-xs text-muted-foreground max-w-[150px]">Comuníquese con nosotros por chat, teléfono o WhatsApp. Disponibles las 24 horas.</p>
-                  </div>
-                  
-                  <div className="flex flex-col items-center flex-1 relative z-10">
-                    <ShieldCheck className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
-                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
-                      2
-                    </div>
-                    <h4 className="font-medium text-sm text-foreground mb-1.5">Verificación de Póliza</h4>
-                    <p className="text-xs text-muted-foreground max-w-[150px]">Verificamos su cobertura con la aseguradora. Necesitará la cédula del titular.</p>
-                  </div>
-
-                  <div className="flex flex-col items-center flex-1 relative z-10">
-                    <Truck className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
-                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
-                      3
-                    </div>
-                    <h4 className="font-medium text-sm text-foreground mb-1.5">Traslado y Preparación</h4>
-                    <p className="text-xs text-muted-foreground max-w-[150px]">Coordinamos el traslado a nuestras instalaciones y la preparación del servicio (4-6 horas).</p>
-                  </div>
-
-                  <div className="flex flex-col items-center flex-1 relative z-10">
-                    <Home className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
-                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
-                      4
-                    </div>
-                    <h4 className="font-medium text-sm text-foreground mb-1.5">Velatorio</h4>
-                    <p className="text-xs text-muted-foreground max-w-[150px]">Asignamos sala de velación y cofre según su plan. El velatorio dura entre 12 y 24 horas.</p>
-                  </div>
-
-                  <div className="flex flex-col items-center flex-1 relative z-10">
-                    <MapPin className="w-4 h-4 text-muted-foreground mb-2 bg-background" />
-                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono mb-3 shadow-[0_0_0_4px_hsl(var(--background))]">
-                      5
-                    </div>
-                    <h4 className="font-medium text-sm text-foreground mb-1.5">Traslado Final</h4>
-                    <p className="text-xs text-muted-foreground max-w-[150px]">Coordinamos el traslado al cementerio o crematorio y cerramos el expediente.</p>
-                  </div>
+            <div className="w-full space-y-5 py-5 sm:py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <section className="rounded-3xl border border-primary/10 bg-card px-5 py-8 text-center shadow-sm sm:px-10 sm:py-11">
+                <Badge variant="secondary" className="mb-5 rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.12em]">
+                  <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                  Atención las 24 horas
+                </Badge>
+                <h1 className="mx-auto max-w-2xl font-serif text-3xl font-medium leading-tight text-primary sm:text-4xl">
+                  Estamos para acompañarle.
+                </h1>
+                <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
+                  Reciba orientación clara y respetuosa para consultar una póliza, conocer nuestros servicios o hablar con el equipo Serena.
+                </p>
+                <div className="mt-7 flex flex-wrap justify-center gap-3">
+                  <a href="https://wa.me/584142005050" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90">
+                    <Phone className="h-4 w-4" /> Hablar con un asesor
+                  </a>
+                  <a href="#ayuda" className="inline-flex items-center justify-center rounded-xl border border-border bg-background px-5 py-3 text-sm font-medium text-primary transition hover:bg-muted">
+                    Consultar por chat
+                  </a>
                 </div>
-              </div>
+                <p className="mt-4 text-xs text-muted-foreground">Atención continua · Respuesta de una persona disponible por WhatsApp</p>
+              </section>
 
-              <div className="w-full max-w-2xl mx-auto mt-14 mb-6 px-4">
-                <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-6">Preguntas Frecuentes</h3>
-                <Accordion type="multiple" className="w-full text-left">
+              <section className="rounded-3xl border border-border bg-background/70 p-5 sm:p-7" aria-labelledby="quick-help-title">
+                <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <h2 id="quick-help-title" className="font-serif text-xl text-primary sm:text-2xl">¿En qué podemos asistirle?</h2>
+                    <p className="mt-1 text-sm text-muted-foreground">Elija una consulta para comenzar.</p>
+                  </div>
+                  <span className="text-xs text-muted-foreground">También puede escribir abajo</span>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {SUGGESTIONS.map((sug, i) => {
+                    const Icon = i === 0 ? ShieldCheck : i === 1 ? Home : Phone;
+                    const title = i === 0 ? 'Verificar una póliza' : i === 1 ? 'Consultar disponibilidad' : 'Iniciar una reserva';
+                    const description = i === 0 ? 'Revise cobertura con la cédula del titular.' : i === 1 ? 'Consulte salas y servicios disponibles.' : 'Le orientamos con los próximos pasos.';
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => handleSend(sug)}
+                        className="group min-h-[112px] rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        data-testid={`btn-suggestion-${i}`}
+                      >
+                        <span className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-primary/[0.06] text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <span className="block text-sm font-semibold text-foreground">{title}</span>
+                        <span className="mt-1 block text-xs leading-5 text-muted-foreground">{description}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+
+              <div className="grid gap-4 lg:grid-cols-2">
+                <details className="group rounded-2xl border border-border bg-card px-5 shadow-sm">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-medium text-primary [&::-webkit-details-marker]:hidden">
+                    <span>
+                      <span className="block font-serif text-lg">Cómo funciona la atención</span>
+                      <span className="mt-1 block text-xs font-normal text-muted-foreground">Conozca las etapas del servicio</span>
+                    </span>
+                    <span className="text-xl text-muted-foreground transition group-open:rotate-180">⌄</span>
+                  </summary>
+                  <div className="grid gap-3 pb-5 sm:grid-cols-2">
+                    {[
+                      { icon: Phone, title: 'Primer contacto', text: 'Escríbanos por chat, teléfono o WhatsApp. Estamos disponibles las 24 horas.' },
+                      { icon: ShieldCheck, title: 'Verificación de póliza', text: 'Revisamos la cobertura con la aseguradora; necesitaremos la cédula del titular.' },
+                      { icon: Truck, title: 'Traslado y preparación', text: 'Coordinamos el traslado y la preparación del servicio.' },
+                      { icon: Home, title: 'Velatorio', text: 'Asignamos sala y cofre según el plan o los acuerdos del servicio.' },
+                      { icon: MapPin, title: 'Traslado final', text: 'Coordinamos el traslado al cementerio o crematorio y cerramos el expediente.' }
+                    ].map(({ icon: Icon, title, text }, i) => (
+                      <div key={title} className="flex gap-3 rounded-xl bg-muted/50 p-3">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{i + 1}</span>
+                        <div>
+                          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+                          <p className="mt-1 text-xs leading-5 text-muted-foreground">{text}</p>
+                        </div>
+                        <Icon className="hidden h-4 w-4 shrink-0 text-primary/60 sm:block" />
+                      </div>
+                    ))}
+                  </div>
+                </details>
+
+                <details className="group rounded-2xl border border-border bg-card px-5 shadow-sm">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-medium text-primary [&::-webkit-details-marker]:hidden">
+                    <span>
+                      <span className="block font-serif text-lg">Preguntas frecuentes</span>
+                      <span className="mt-1 block text-xs font-normal text-muted-foreground">Documentos, pólizas, pagos y horarios</span>
+                    </span>
+                    <span className="text-xl text-muted-foreground transition group-open:rotate-180">⌄</span>
+                  </summary>
+                  <Accordion type="multiple" className="w-full pb-2 text-left">
                   <AccordionItem value="item-1">
                     <AccordionTrigger className="text-sm font-medium text-foreground text-left">¿Qué documentos necesito para iniciar el servicio?</AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
@@ -496,8 +527,10 @@ export default function AgentChat() {
                       Puede llamar o escribir por WhatsApp al +58 414-200-5050, disponible las 24 horas. También puede usar este chat para consultas inmediatas sobre pólizas, disponibilidad y reservas.
                     </AccordionContent>
                   </AccordionItem>
-                </Accordion>
+                  </Accordion>
+                </details>
               </div>
+              <p className="pb-4 text-center text-xs text-muted-foreground">Serena · Atención respetuosa para usted y su familia</p>
             </div>
           ) : (
             turns.map(turn => (
@@ -579,7 +612,7 @@ export default function AgentChat() {
         href="https://wa.me/584142005050"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-[88px] right-5 z-50 bg-[#25D366] text-white p-3 rounded-full shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+        className="fixed bottom-[88px] right-5 z-50 hidden bg-[#25D366] text-white p-3 rounded-full shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 sm:flex"
         title="Hablar con un asesor — +58 414-200-5050"
         data-testid="link-whatsapp"
       >
