@@ -21,11 +21,21 @@ import type {
 
 import type {
   AgentChatInput,
+  CatalogCategory,
+  CatalogCategoryInput,
+  CatalogCodeInput,
+  CatalogDashboard,
+  CatalogImportInput,
+  CatalogImportResult,
+  CatalogProduct,
+  CatalogProductInput,
   ErrorResponse,
   HealthStatus,
   InventoryState,
   InventoryUpdateInput,
-  Policy
+  OperationResult,
+  Policy,
+  VerificationResult
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -510,4 +520,436 @@ export function useGetPolicyByCedula<TData = Awaited<ReturnType<typeof getPolicy
 
 
 
+
+export const getGetCatalogDashboardUrl = () => {
+
+
+
+
+  return `/api/catalog/dashboard`
+}
+
+/**
+ * @summary Obtener categorías, productos y resultados recientes
+ */
+export const getCatalogDashboard = async ( options?: RequestInit): Promise<CatalogDashboard> => {
+
+  return customFetch<CatalogDashboard>(getGetCatalogDashboardUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetCatalogDashboardQueryKey = () => {
+    return [
+    `/api/catalog/dashboard`
+    ] as const;
+    }
+
+
+export const getGetCatalogDashboardQueryOptions = <TData = Awaited<ReturnType<typeof getCatalogDashboard>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getCatalogDashboard>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCatalogDashboardQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCatalogDashboard>>> = ({ signal }) => getCatalogDashboard({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCatalogDashboard>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetCatalogDashboardQueryResult = NonNullable<Awaited<ReturnType<typeof getCatalogDashboard>>>
+export type GetCatalogDashboardQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Obtener categorías, productos y resultados recientes
+ */
+
+export function useGetCatalogDashboard<TData = Awaited<ReturnType<typeof getCatalogDashboard>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getCatalogDashboard>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetCatalogDashboardQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateCatalogCategoryUrl = () => {
+
+
+
+
+  return `/api/catalog/categories`
+}
+
+/**
+ * @summary Registrar una categoría
+ */
+export const createCatalogCategory = async (catalogCategoryInput: CatalogCategoryInput, options?: RequestInit): Promise<CatalogCategory> => {
+
+  return customFetch<CatalogCategory>(getCreateCatalogCategoryUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(catalogCategoryInput)
+  }
+);}
+
+
+
+
+
+export const getCreateCatalogCategoryMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCatalogCategory>>, TError,{data: BodyType<CatalogCategoryInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createCatalogCategory>>, TError,{data: BodyType<CatalogCategoryInput>}, TContext> => {
+
+const mutationKey = ['createCatalogCategory'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCatalogCategory>>, {data: BodyType<CatalogCategoryInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCatalogCategory(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCatalogCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof createCatalogCategory>>>
+    export type CreateCatalogCategoryMutationBody = BodyType<CatalogCategoryInput>
+    export type CreateCatalogCategoryMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Registrar una categoría
+ */
+export const useCreateCatalogCategory = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCatalogCategory>>, TError,{data: BodyType<CatalogCategoryInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createCatalogCategory>>,
+        TError,
+        {data: BodyType<CatalogCategoryInput>},
+        TContext
+      > => {
+      return useMutation(getCreateCatalogCategoryMutationOptions(options));
+    }
+
+export const getCreateCatalogProductUrl = () => {
+
+
+
+
+  return `/api/catalog/products`
+}
+
+/**
+ * @summary Registrar un producto con categoría, código y cantidad
+ */
+export const createCatalogProduct = async (catalogProductInput: CatalogProductInput, options?: RequestInit): Promise<CatalogProduct> => {
+
+  return customFetch<CatalogProduct>(getCreateCatalogProductUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(catalogProductInput)
+  }
+);}
+
+
+
+
+
+export const getCreateCatalogProductMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCatalogProduct>>, TError,{data: BodyType<CatalogProductInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createCatalogProduct>>, TError,{data: BodyType<CatalogProductInput>}, TContext> => {
+
+const mutationKey = ['createCatalogProduct'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCatalogProduct>>, {data: BodyType<CatalogProductInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCatalogProduct(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCatalogProductMutationResult = NonNullable<Awaited<ReturnType<typeof createCatalogProduct>>>
+    export type CreateCatalogProductMutationBody = BodyType<CatalogProductInput>
+    export type CreateCatalogProductMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Registrar un producto con categoría, código y cantidad
+ */
+export const useCreateCatalogProduct = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCatalogProduct>>, TError,{data: BodyType<CatalogProductInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createCatalogProduct>>,
+        TError,
+        {data: BodyType<CatalogProductInput>},
+        TContext
+      > => {
+      return useMutation(getCreateCatalogProductMutationOptions(options));
+    }
+
+export const getEvaluateCatalogCodeUrl = () => {
+
+
+
+
+  return `/api/operations/evaluate`
+}
+
+/**
+ * @summary Evaluar un código de producto
+ */
+export const evaluateCatalogCode = async (catalogCodeInput: CatalogCodeInput, options?: RequestInit): Promise<OperationResult> => {
+
+  return customFetch<OperationResult>(getEvaluateCatalogCodeUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(catalogCodeInput)
+  }
+);}
+
+
+
+
+
+export const getEvaluateCatalogCodeMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateCatalogCode>>, TError,{data: BodyType<CatalogCodeInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof evaluateCatalogCode>>, TError,{data: BodyType<CatalogCodeInput>}, TContext> => {
+
+const mutationKey = ['evaluateCatalogCode'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof evaluateCatalogCode>>, {data: BodyType<CatalogCodeInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  evaluateCatalogCode(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EvaluateCatalogCodeMutationResult = NonNullable<Awaited<ReturnType<typeof evaluateCatalogCode>>>
+    export type EvaluateCatalogCodeMutationBody = BodyType<CatalogCodeInput>
+    export type EvaluateCatalogCodeMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Evaluar un código de producto
+ */
+export const useEvaluateCatalogCode = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateCatalogCode>>, TError,{data: BodyType<CatalogCodeInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof evaluateCatalogCode>>,
+        TError,
+        {data: BodyType<CatalogCodeInput>},
+        TContext
+      > => {
+      return useMutation(getEvaluateCatalogCodeMutationOptions(options));
+    }
+
+export const getVerifyCatalogCodeUrl = () => {
+
+
+
+
+  return `/api/operations/verify`
+}
+
+/**
+ * @summary Verificar si un código corresponde a un producto registrado
+ */
+export const verifyCatalogCode = async (catalogCodeInput: CatalogCodeInput, options?: RequestInit): Promise<VerificationResult> => {
+
+  return customFetch<VerificationResult>(getVerifyCatalogCodeUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(catalogCodeInput)
+  }
+);}
+
+
+
+
+
+export const getVerifyCatalogCodeMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof verifyCatalogCode>>, TError,{data: BodyType<CatalogCodeInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof verifyCatalogCode>>, TError,{data: BodyType<CatalogCodeInput>}, TContext> => {
+
+const mutationKey = ['verifyCatalogCode'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof verifyCatalogCode>>, {data: BodyType<CatalogCodeInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  verifyCatalogCode(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type VerifyCatalogCodeMutationResult = NonNullable<Awaited<ReturnType<typeof verifyCatalogCode>>>
+    export type VerifyCatalogCodeMutationBody = BodyType<CatalogCodeInput>
+    export type VerifyCatalogCodeMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Verificar si un código corresponde a un producto registrado
+ */
+export const useVerifyCatalogCode = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof verifyCatalogCode>>, TError,{data: BodyType<CatalogCodeInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof verifyCatalogCode>>,
+        TError,
+        {data: BodyType<CatalogCodeInput>},
+        TContext
+      > => {
+      return useMutation(getVerifyCatalogCodeMutationOptions(options));
+    }
+
+export const getImportCatalogProductsUrl = () => {
+
+
+
+
+  return `/api/operations/import`
+}
+
+/**
+ * @summary Cargar productos desde un archivo CSV
+ */
+export const importCatalogProducts = async (catalogImportInput: CatalogImportInput, options?: RequestInit): Promise<CatalogImportResult> => {
+
+  return customFetch<CatalogImportResult>(getImportCatalogProductsUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(catalogImportInput)
+  }
+);}
+
+
+
+
+
+export const getImportCatalogProductsMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importCatalogProducts>>, TError,{data: BodyType<CatalogImportInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importCatalogProducts>>, TError,{data: BodyType<CatalogImportInput>}, TContext> => {
+
+const mutationKey = ['importCatalogProducts'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importCatalogProducts>>, {data: BodyType<CatalogImportInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importCatalogProducts(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportCatalogProductsMutationResult = NonNullable<Awaited<ReturnType<typeof importCatalogProducts>>>
+    export type ImportCatalogProductsMutationBody = BodyType<CatalogImportInput>
+    export type ImportCatalogProductsMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Cargar productos desde un archivo CSV
+ */
+export const useImportCatalogProducts = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importCatalogProducts>>, TError,{data: BodyType<CatalogImportInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof importCatalogProducts>>,
+        TError,
+        {data: BodyType<CatalogImportInput>},
+        TContext
+      > => {
+      return useMutation(getImportCatalogProductsMutationOptions(options));
+    }
 

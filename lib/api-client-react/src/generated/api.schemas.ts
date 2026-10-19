@@ -71,3 +71,132 @@ export interface ErrorResponse {
   error: string;
 }
 
+export interface CatalogCategory {
+  id: number;
+  code: string;
+  name: string;
+  createdAt: string;
+}
+
+export interface CatalogCategoryInput {
+  /**
+     * @minLength 2
+     * @maxLength 24
+     */
+  code: string;
+  /**
+     * @minLength 2
+     * @maxLength 80
+     */
+  name: string;
+}
+
+export interface CatalogProduct {
+  id: number;
+  categoryId: number;
+  categoryName: string;
+  code: string;
+  name: string;
+  quantity: number;
+  createdAt: string;
+}
+
+export interface CatalogProductInput {
+  /** @minimum 1 */
+  categoryId: number;
+  /**
+     * @minLength 2
+     * @maxLength 32
+     */
+  code: string;
+  /**
+     * @minLength 2
+     * @maxLength 120
+     */
+  name: string;
+  /** @minimum 0 */
+  quantity: number;
+}
+
+export interface CatalogCodeInput {
+  /**
+     * @minLength 2
+     * @maxLength 32
+     */
+  code: string;
+}
+
+export type OperationResultStatus = typeof OperationResultStatus[keyof typeof OperationResultStatus];
+
+
+export const OperationResultStatus = {
+  Aprobado: 'Aprobado',
+  Rechazado: 'Rechazado',
+} as const;
+
+export interface OperationResult {
+  id: number;
+  action: string;
+  /** @nullable */
+  productId: number | null;
+  /** @nullable */
+  productCode: string | null;
+  /** @nullable */
+  productName: string | null;
+  status: OperationResultStatus;
+  responseCode: string;
+  responseMessage: string;
+  responseTimeMs: number;
+  /** @nullable */
+  sourceFileName: string | null;
+  createdAt: string;
+}
+
+export interface VerificationResult {
+  result: OperationResult;
+  product: CatalogProduct | null;
+}
+
+export interface CatalogImportRow {
+  code: string;
+  name: string;
+  category: string;
+  quantity: number;
+}
+
+export interface CatalogImportInput {
+  /**
+     * @minLength 1
+     * @maxLength 255
+     */
+  fileName: string;
+  /**
+     * @minItems 1
+     * @maxItems 500
+     */
+  rows: CatalogImportRow[];
+}
+
+export interface CatalogImportResult {
+  fileName: string;
+  totalRows: number;
+  approvedRows: number;
+  rejectedRows: number;
+  responseTimeMs: number;
+  results: OperationResult[];
+}
+
+export type CatalogDashboardSummary = {
+  categoryCount: number;
+  productCount: number;
+  approvedCount: number;
+  rejectedCount: number;
+};
+
+export interface CatalogDashboard {
+  categories: CatalogCategory[];
+  products: CatalogProduct[];
+  events: OperationResult[];
+  summary: CatalogDashboardSummary;
+}
+

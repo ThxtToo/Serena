@@ -99,3 +99,206 @@ export const GetPolicyByCedulaResponse = zod.object({
 })
 
 
+/**
+ * @summary Obtener categorías, productos y resultados recientes
+ */
+export const GetCatalogDashboardResponse = zod.object({
+  "categories": zod.array(zod.object({
+  "id": zod.number(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "createdAt": zod.coerce.date()
+})),
+  "products": zod.array(zod.object({
+  "id": zod.number(),
+  "categoryId": zod.number(),
+  "categoryName": zod.string(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "quantity": zod.number(),
+  "createdAt": zod.coerce.date()
+})),
+  "events": zod.array(zod.object({
+  "id": zod.number(),
+  "action": zod.string(),
+  "productId": zod.number().nullable(),
+  "productCode": zod.string().nullable(),
+  "productName": zod.string().nullable(),
+  "status": zod.enum(['Aprobado', 'Rechazado']),
+  "responseCode": zod.string(),
+  "responseMessage": zod.string(),
+  "responseTimeMs": zod.number(),
+  "sourceFileName": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+})),
+  "summary": zod.object({
+  "categoryCount": zod.number(),
+  "productCount": zod.number(),
+  "approvedCount": zod.number(),
+  "rejectedCount": zod.number()
+})
+})
+
+
+/**
+ * @summary Registrar una categoría
+ */
+export const createCatalogCategoryBodyCodeMin = 2;
+export const createCatalogCategoryBodyCodeMax = 24;
+
+export const createCatalogCategoryBodyNameMin = 2;
+export const createCatalogCategoryBodyNameMax = 80;
+
+
+
+export const CreateCatalogCategoryBody = zod.object({
+  "code": zod.string().min(createCatalogCategoryBodyCodeMin).max(createCatalogCategoryBodyCodeMax),
+  "name": zod.string().min(createCatalogCategoryBodyNameMin).max(createCatalogCategoryBodyNameMax)
+})
+
+export const CreateCatalogCategoryResponse = zod.object({
+  "id": zod.number(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "createdAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Registrar un producto con categoría, código y cantidad
+ */
+
+export const createCatalogProductBodyCodeMin = 2;
+export const createCatalogProductBodyCodeMax = 32;
+
+export const createCatalogProductBodyNameMin = 2;
+export const createCatalogProductBodyNameMax = 120;
+
+export const createCatalogProductBodyQuantityMin = 0;
+
+
+
+export const CreateCatalogProductBody = zod.object({
+  "categoryId": zod.number().min(1),
+  "code": zod.string().min(createCatalogProductBodyCodeMin).max(createCatalogProductBodyCodeMax),
+  "name": zod.string().min(createCatalogProductBodyNameMin).max(createCatalogProductBodyNameMax),
+  "quantity": zod.number().min(createCatalogProductBodyQuantityMin)
+})
+
+export const CreateCatalogProductResponse = zod.object({
+  "id": zod.number(),
+  "categoryId": zod.number(),
+  "categoryName": zod.string(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "quantity": zod.number(),
+  "createdAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Evaluar un código de producto
+ */
+export const evaluateCatalogCodeBodyCodeMin = 2;
+export const evaluateCatalogCodeBodyCodeMax = 32;
+
+
+
+export const EvaluateCatalogCodeBody = zod.object({
+  "code": zod.string().min(evaluateCatalogCodeBodyCodeMin).max(evaluateCatalogCodeBodyCodeMax)
+})
+
+export const EvaluateCatalogCodeResponse = zod.object({
+  "id": zod.number(),
+  "action": zod.string(),
+  "productId": zod.number().nullable(),
+  "productCode": zod.string().nullable(),
+  "productName": zod.string().nullable(),
+  "status": zod.enum(['Aprobado', 'Rechazado']),
+  "responseCode": zod.string(),
+  "responseMessage": zod.string(),
+  "responseTimeMs": zod.number(),
+  "sourceFileName": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Verificar si un código corresponde a un producto registrado
+ */
+export const verifyCatalogCodeBodyCodeMin = 2;
+export const verifyCatalogCodeBodyCodeMax = 32;
+
+
+
+export const VerifyCatalogCodeBody = zod.object({
+  "code": zod.string().min(verifyCatalogCodeBodyCodeMin).max(verifyCatalogCodeBodyCodeMax)
+})
+
+export const VerifyCatalogCodeResponse = zod.object({
+  "result": zod.object({
+  "id": zod.number(),
+  "action": zod.string(),
+  "productId": zod.number().nullable(),
+  "productCode": zod.string().nullable(),
+  "productName": zod.string().nullable(),
+  "status": zod.enum(['Aprobado', 'Rechazado']),
+  "responseCode": zod.string(),
+  "responseMessage": zod.string(),
+  "responseTimeMs": zod.number(),
+  "sourceFileName": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+}),
+  "product": zod.union([zod.object({
+  "id": zod.number(),
+  "categoryId": zod.number(),
+  "categoryName": zod.string(),
+  "code": zod.string(),
+  "name": zod.string(),
+  "quantity": zod.number(),
+  "createdAt": zod.coerce.date()
+}),zod.null()])
+})
+
+
+/**
+ * @summary Cargar productos desde un archivo CSV
+ */
+export const importCatalogProductsBodyFileNameMax = 255;
+
+export const importCatalogProductsBodyRowsMax = 500;
+
+
+
+export const ImportCatalogProductsBody = zod.object({
+  "fileName": zod.string().min(1).max(importCatalogProductsBodyFileNameMax),
+  "rows": zod.array(zod.object({
+  "code": zod.string(),
+  "name": zod.string(),
+  "category": zod.string(),
+  "quantity": zod.number()
+})).min(1).max(importCatalogProductsBodyRowsMax)
+})
+
+export const ImportCatalogProductsResponse = zod.object({
+  "fileName": zod.string(),
+  "totalRows": zod.number(),
+  "approvedRows": zod.number(),
+  "rejectedRows": zod.number(),
+  "responseTimeMs": zod.number(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "action": zod.string(),
+  "productId": zod.number().nullable(),
+  "productCode": zod.string().nullable(),
+  "productName": zod.string().nullable(),
+  "status": zod.enum(['Aprobado', 'Rechazado']),
+  "responseCode": zod.string(),
+  "responseMessage": zod.string(),
+  "responseTimeMs": zod.number(),
+  "sourceFileName": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+}))
+})
+
+
