@@ -18,8 +18,9 @@ export default function Portal() {
   const { logout, user } = useAuth();
   const [cedula, setCedula] = useState('');
   const [searchCedula, setSearchCedula] = useState('');
+  const [inputError, setInputError] = useState('');
 
-  const { data: policy, isLoading, isError, error } = useGetPolicyByCedula(searchCedula, {
+  const { data: policy, isLoading, isError } = useGetPolicyByCedula(searchCedula, {
     query: {
       enabled: !!searchCedula,
       queryKey: getGetPolicyByCedulaQueryKey(searchCedula)
@@ -28,9 +29,13 @@ export default function Portal() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (cedula.trim()) {
-      setSearchCedula(cedula.trim());
+    const cleanCedula = cedula.trim();
+    if (!cleanCedula) {
+      setInputError('Por favor ingrese un número de cédula válido.');
+      return;
     }
+    setInputError('');
+    setSearchCedula(cleanCedula);
   };
 
   const currentStage = 1; // "Traslado en Progreso" (0-indexed)
@@ -114,13 +119,19 @@ export default function Portal() {
                     <Input 
                       placeholder="Ej: V-14555666" 
                       value={cedula}
-                      onChange={(e) => setCedula(e.target.value)}
+                      onChange={(e) => {
+                        setCedula(e.target.value);
+                        if (inputError) setInputError('');
+                      }}
                       className="pl-9"
                       data-testid="input-policy-search"
                     />
                   </div>
                   <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground" data-testid="button-policy-search">Consultar</Button>
                 </form>
+                {inputError && (
+                  <p className="text-xs text-destructive mt-2">{inputError}</p>
+                )}
               </CardHeader>
               
               {isLoading && (
@@ -149,11 +160,11 @@ export default function Portal() {
                         <p className="text-sm text-muted-foreground">{policy.cedula}</p>
                       </div>
                       <div className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                        policy.estatus.toLowerCase() === 'solvente' 
+                        (policy.estatus || '').toLowerCase() === 'solvente'
                           ? 'bg-green-500/10 text-green-700 border-green-500/20' 
                           : 'bg-destructive/10 text-destructive border-destructive/20'
                       }`}>
-                        {policy.estatus.toUpperCase()}
+                        {(policy.estatus || 'DESCONOCIDO').toUpperCase()}
                       </div>
                     </div>
                     
@@ -171,14 +182,14 @@ export default function Portal() {
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Límite</p>
-                        <p className="font-medium text-sm mt-1 text-primary">${policy.limite_usd.toLocaleString()}</p>
+                        <p className="font-medium text-sm mt-1 text-primary">${(policy.limite_usd ?? 0).toLocaleString()}</p>
                       </div>
                     </div>
 
                     <div>
                       <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Cobertura</p>
                       <ul className="space-y-2">
-                        {policy.cobertura.map((item, i) => (
+                        {(policy.cobertura || []).map((item, i) => (
                           <li key={i} className="text-sm flex items-start gap-2">
                             <CheckCircle2 className="w-4 h-4 text-brand-gold shrink-0 mt-0.5" />
                             <span>{item}</span>

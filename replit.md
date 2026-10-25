@@ -1,45 +1,77 @@
-# [Project name]
+# Serena — Sistema de Gestión Funeraria y Asistencia de Crisis
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Serena es una plataforma web integral diseñada para la gestión operativa funeraria, verificación automatizada de pólizas de seguro, administración de inventarios (salas, vehículos y cofres), registro de catálogo de servicios y asistencia inteligente con IA durante momentos de crisis.
 
-## Run & Operate
+## Stack Tecnológico
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- **Monorepo**: pnpm workspaces
+- **Node.js**: v24.x
+- **TypeScript**: v5.9
+- **Backend**: Express 5 (`@workspace/api-server`)
+- **Base de Datos**: PostgreSQL + Drizzle ORM (`@workspace/db`)
+- **Validación**: Zod (`zod`), `drizzle-zod` (`@workspace/api-zod`)
+- **API Spec & Codegen**: OpenAPI 3.1 (`lib/api-spec/openapi.yaml`) + Orval (`@workspace/api-client-react`)
+- **Frontend Principal**: React 18 + Vite + Tailwind CSS + Lucide Icons + Shadcn UI (`artifacts/serena`)
+- **Sandbox Mockup**: Vite + React (`artifacts/mockup-sandbox`)
 
-## Stack
+---
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+## Estructura del Monorepo
 
-## Where things live
+```
+.
+├── artifacts/
+│   ├── api-server/         # Servidor API Express (Puerto 5000)
+│   ├── serena/             # Aplicación Frontend Principal React + Vite
+│   └── mockup-sandbox/     # Entorno de pruebas de prototipos UI
+├── lib/
+│   ├── api-spec/           # Definición OpenAPI 3.1 (`openapi.yaml`) y config de Orval
+│   ├── api-client-react/   # Hooks y API client generados automáticamente por Orval
+│   ├── api-zod/            # Schemas Zod generados automáticamente
+│   └── db/                 # Esquemas Drizzle ORM y conexión a PostgreSQL
+├── scripts/                # Scripts auxiliares y utilidades de compilación
+├── CONTRIBUTING.md         # Guía para desarrolladores y colaboradores
+└── replit.md               # Este archivo de arquitectura y documentación
+```
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+---
 
-## Architecture decisions
+## Comandos Principales
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+### Desarrollar y Ejecutar
+- `pnpm --filter @workspace/api-server run dev` — Ejecutar el servidor API en modo desarrollo (Puerto 5000)
+- `pnpm --filter @workspace/serena run dev` — Ejecutar la aplicación web frontend Serena
+- `pnpm --filter @workspace/api-spec run codegen` — Regenerar los hooks React y esquemas Zod a partir de `openapi.yaml`
+- `pnpm --filter @workspace/db run push` — Aplicar cambios del esquema Drizzle a la base de datos de desarrollo
 
-## Product
+### Verificación y Compilación
+- `pnpm run typecheck` — Verificación de tipos TypeScript en todo el monorepo
+- `pnpm run build` — Verificación de tipos y compilación de todos los paquetes y artifacts
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+---
 
-## User preferences
+## Variables de Entorno
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- `DATABASE_URL`: Cadena de conexión a PostgreSQL (Ej: `postgres://user:pass@localhost:5432/serena_db`). Si no se proporciona, el servidor opera con el almacén de datos en memoria para pruebas.
+- `PORT`: Puerto para `api-server` (por defecto `5000`).
 
-## Gotchas
+---
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+## Guía de Arquitectura del Flujo de Datos API (Contract-First)
 
-## Pointers
+El proyecto sigue una arquitectura **Contract-First**:
 
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+1. **Definición de Contrato**: La especificación OpenAPI vive en `lib/api-spec/openapi.yaml`.
+2. **Generación de Código**:
+   Ejecutar `pnpm --filter @workspace/api-spec run codegen`.
+   Esto actualiza automáticamente:
+   - `@workspace/api-client-react`: React Hooks con TanStack Query y llamadas de fetch.
+   - `@workspace/api-zod`: Schemas de validación Zod.
+3. **Implementación de Endpoints**: Se crean las rutas Express en `artifacts/api-server/src/routes/`.
+4. **Consumo en Frontend**: Los componentes en `artifacts/serena/src/` importan directamente los hooks auto-generados de `@workspace/api-client-react`.
+
+---
+
+## Autonomía del Equipo
+
+Para permitir que el equipo de desarrollo continúe expandiendo y manteniendo el proyecto de forma independiente sin depender de un único desarrollador, consulta la guía detallada en [`CONTRIBUTING.md`](./CONTRIBUTING.md).
