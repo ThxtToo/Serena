@@ -48,6 +48,10 @@ Serena es una plataforma web integral diseñada para la gestión operativa funer
 - `pnpm run typecheck` — Verificación de tipos TypeScript en todo el monorepo
 - `pnpm run build` — Verificación de tipos y compilación de todos los paquetes y artifacts
 
+### Alojamiento y Despliegue Web
+- **GitHub Pages**: Configurado mediante `.github/workflows/deploy-pages.yml`.
+  - Al hacer push a `main`/`master`, GitHub Actions compila automáticamente el frontend y lo despliega en `https://ThxtToo.github.io/Serena/`.
+
 ---
 
 ## Variables de Entorno

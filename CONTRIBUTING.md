@@ -97,9 +97,21 @@ pnpm run build
 
 ---
 
-## 6. Credenciales de Prueba por Defecto
+## 6. Despliegue Automático en GitHub Pages
 
-Para probar la aplicación localmente sin crear cuentas nuevas:
+El proyecto cuenta con un workflow de **GitHub Actions** en `.github/workflows/deploy-pages.yml` que compila y publica automáticamente la interfaz web en GitHub Pages cada vez que se envía un cambio a la rama principal (`main` / `master`).
+
+### Pasos para activar GitHub Pages en el repositorio:
+1. Dirígete a tu repositorio en GitHub: `https://github.com/ThxtToo/Serena`
+2. Ve a la pestaña **Settings** (Configuración) -> **Pages**.
+3. En la sección **Build and deployment** -> **Source**, selecciona **GitHub Actions**.
+4. ¡Listo! Cada vez que hagas `push` o fusiones cambios, GitHub Actions compilará la app y desplegará la web en la URL pública: `https://ThxtToo.github.io/Serena/`
+
+---
+
+## 7. Credenciales de Prueba por Defecto
+
+Para probar la aplicación localmente o en la web desplegada sin crear cuentas nuevas:
 
 - **Operador / Personal Funerario**:
   - Email: `admin@serena.com`
